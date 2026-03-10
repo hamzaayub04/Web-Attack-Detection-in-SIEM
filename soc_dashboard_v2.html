@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebGuard SIEM v2 — Advanced SOC Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Bebas+Neue&family=Exo+2:wght@200;400;600;800&display=swap');
+
+:root {
+  --bg0: #020509;
+  --bg1: #050d14;
+  --bg2: #091520;
+  --border: #0c2235;
+  --border2: #143048;
+  --accent: #00c8ff;
+  --accent2: #00ffaa;
+  --red: #ff2952;
+  --orange: #ff7a00;
+  --yellow: #ffd000;
+  --purple: #b060ff;
+  --grid: rgba(0,200,255,0.025);
+  --text: #6ab8d4;
+  --text2: #2d6a80;
+  --glow: 0 0 20px rgba(0,200,255,0.15);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg0);
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image:
+    repeating-linear-gradient(0deg, var(--grid) 0, transparent 1px, transparent 64px, var(--grid) 65px),
+    repeating-linear-gradient(90deg, var(--grid) 0, transparent 1px, transparent 64px, var(--grid) 65px);
+}
+
+/* ── Scanline ── */
+body::before {
+  content:''; position:fixed; inset:0; z-index:9999; pointer-events:none;
+  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.06) 2px,rgba(0,0,0,0.06) 4px);
+}
+
+/* ── HEADER ── */
+header {
+  height:60px; display:flex; align-items:center; justify-content:space-between;
+  padding:0 24px;
+  background: linear-gradient(90deg, var(--bg1) 0%, #071220 50%, var(--bg1) 100%);
+  border-bottom: 1px solid var(--border2);
+  box-shadow: 0 1px 30px rgba(0,200,255,0.08), 0 0 0 1px rgba(0,200,255,0.05);
+  position:sticky; top:0; z-index:100;
+}
+.logo {
+  font-family: 'Bebas Neue', cursive;
+  font-size:26px; letter-spacing:4px;
+  color: var(--accent);
+  text-shadow: 0 0 30px rgba(0,200,255,0.5);
+}
+.logo em { color:var(--accent2); font-style:normal; }
+.hdr-right { display:flex; align-items:center; gap:20px; font-size:11px; }
+.live-badge {
+  display:flex; align-items:center; gap:6px;
+  color: var(--accent2);
+  padding:4px 12px; border:1px solid rgba(0,255,170,0.3);
+  background:rgba(0,255,170,0.05);
+}
+.live-dot { width:7px; height:7px; border-radius:50%; background:var(--accent2); animation:blink 1.5s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+#hdr-clock { color:var(--accent); font-size:13px; }
+
+/* ── NAV TABS ── */
+nav {
+  display:flex; gap:1px;
+  background:var(--bg1);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+  overflow-x:auto;
+}
+.nav-tab {
+  padding:10px 20px; font-size:11px; cursor:pointer; letter-spacing:1.5px;
+  color:var(--text2); border-bottom:2px solid transparent;
+  transition:all 0.2s; white-space:nowrap; font-family:'JetBrains Mono',monospace;
+}
+.nav-tab:hover { color:var(--text); background:rgba(0,200,255,0.03); }
+.nav-tab.active { color:var(--accent); border-bottom-color:var(--accent); background:rgba(0,200,255,0.05); }
+
+/* ── PAGES ── */
+.page { display:none; padding:20px 24px; }
+.page.active { display:block; }
+
+/* ── CARDS ── */
+.stat-row { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-bottom:18px; }
+.card {
+  background:var(--bg1); border:1px solid var(--border2);
+  padding:16px; position:relative; overflow:hidden;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  transition:border-color 0.2s;
+}
+.card::before { content:''; position:absolute; top:0; left:0; width:2px; height:100%; background:var(--cc,var(--accent)); }
+.card:hover { border-color:rgba(0,200,255,0.4); }
+.card-label { font-size:9px; color:var(--text2); letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
+.card-val {
+  font-family:'Bebas Neue',cursive; font-size:32px; line-height:1;
+  color:var(--cc,var(--accent)); text-shadow:0 0 12px var(--cc,rgba(0,200,255,0.3));
+}
+.card-sub { font-size:9px; color:var(--text2); margin-top:4px; }
+
+/* ── PANELS ── */
+.row { display:grid; gap:14px; margin-bottom:14px; }
+.r2 { grid-template-columns:1fr 1fr; }
+.r3 { grid-template-columns:1fr 1fr 1fr; }
+.r13 { grid-template-columns:1fr 2.2fr; }
+.r21 { grid-template-columns:2fr 1fr; }
+
+.panel {
+  background:var(--bg1); border:1px solid var(--border);
+  overflow:hidden;
+}
+.ph {
+  padding:10px 16px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(0,200,255,0.02);
+}
+.ph-title { font-size:11px; color:var(--accent); letter-spacing:2px; text-transform:uppercase; font-weight:700; }
+.ph-badge { font-size:9px; padding:2px 8px; border:1px solid currentColor; letter-spacing:1px; }
+.pb { padding:14px 16px; }
+
+/* ── ALERT FEED ── */
+#alert-feed { height:300px; overflow-y:auto; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+.af-head {
+  display:grid; grid-template-columns:80px 100px 130px 100px 80px 1fr;
+  gap:8px; padding:5px 0; font-size:9px; color:var(--text2); letter-spacing:1.5px;
+  border-bottom:1px solid var(--border); text-transform:uppercase;
+}
+.af-row {
+  display:grid; grid-template-columns:80px 100px 130px 100px 80px 1fr;
+  gap:8px; align-items:center; padding:7px 0;
+  border-bottom:1px solid rgba(12,34,53,0.6);
+  font-size:11px; cursor:pointer; transition:background 0.15s;
+  animation: fadeSlide 0.3s ease-out;
+}
+@keyframes fadeSlide { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:none} }
+.af-row:hover { background:rgba(0,200,255,0.04); }
+.sev { font-size:9px; padding:2px 5px; font-weight:700; letter-spacing:0.5px; text-align:center; }
+.sev-CRITICAL { background:rgba(255,41,82,0.15); color:var(--red); border:1px solid rgba(255,41,82,0.4); }
+.sev-HIGH { background:rgba(255,122,0,0.12); color:var(--orange); border:1px solid rgba(255,122,0,0.3); }
+.sev-MEDIUM { background:rgba(255,208,0,0.08); color:var(--yellow); border:1px solid rgba(255,208,0,0.25); }
+.sev-LOW { background:rgba(0,255,170,0.06); color:var(--accent2); border:1px solid rgba(0,255,170,0.2); }
+.af-ip { color:var(--accent); font-size:10px; }
+.af-type { color:var(--accent2); font-size:10px; }
+.af-country { color:var(--text2); font-size:10px; }
+.af-score { font-size:10px; }
+.af-desc { color:var(--text2); font-size:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* ── BAR CHART ── */
+.bar-list { display:flex; flex-direction:column; gap:9px; }
+.bi { display:flex; align-items:center; gap:8px; font-size:10px; }
+.bi-label { width:140px; color:var(--text2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.bi-track { flex:1; height:12px; background:var(--border); position:relative; overflow:hidden; }
+.bi-fill { height:100%; transition:width 1.5s cubic-bezier(0.16,1,0.3,1); width:0%; }
+.bi-n { width:32px; text-align:right; font-weight:700; }
+
+/* ── IP TABLE ── */
+.ip-tbl { width:100%; border-collapse:collapse; font-size:10px; }
+.ip-tbl th { color:var(--text2); font-weight:400; padding:4px 6px; border-bottom:1px solid var(--border); text-align:left; font-size:9px; letter-spacing:1px; }
+.ip-tbl td { padding:6px 6px; border-bottom:1px solid rgba(12,34,53,0.5); vertical-align:middle; }
+.ip-tbl tr:hover td { background:rgba(0,200,255,0.03); }
+.score-pill { display:inline-block; padding:1px 6px; font-size:9px; font-weight:700; border:1px solid currentColor; }
+.risk-bar-wrap { display:inline-block; width:60px; height:6px; background:var(--border); vertical-align:middle; }
+.risk-bar { height:100%; background:var(--red); }
+
+/* ── MITRE TABLE ── */
+.mitre-tbl { width:100%; border-collapse:collapse; font-size:10px; }
+.mitre-tbl th { color:var(--text2); font-weight:400; padding:5px 8px; border-bottom:1px solid var(--border); text-align:left; font-size:9px; letter-spacing:1px; }
+.mitre-tbl td { padding:7px 8px; border-bottom:1px solid rgba(12,34,53,0.5); }
+.mitre-tbl tr:hover td { background:rgba(0,200,255,0.03); }
+.tech-id { color:var(--purple); font-weight:700; font-size:10px; }
+.tactic-badge { font-size:9px; padding:1px 6px; background:rgba(176,96,255,0.1); border:1px solid rgba(176,96,255,0.3); color:var(--purple); }
+
+/* ── SIGMA PANEL ── */
+.sigma-tabs { display:flex; gap:2px; flex-wrap:wrap; margin-bottom:12px; }
+.stab { padding:5px 12px; font-size:10px; cursor:pointer; background:var(--border); border:1px solid var(--border2); color:var(--text2); letter-spacing:1px; transition:all 0.2s; font-family:'JetBrains Mono',monospace; }
+.stab:hover,.stab.active { background:rgba(0,200,255,0.08); color:var(--accent); border-color:var(--accent); }
+.sigma-code { background:#020609; border:1px solid var(--border); padding:14px; font-size:11px; line-height:1.8; max-height:260px; overflow-y:auto; white-space:pre; color:#4a8fa8; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+.sk { color:#ff9966; font-weight:700; }
+.sv { color:#66ffaa; }
+.sc { color:#2d6a80; font-style:italic; }
+.sf { color:var(--accent); }
+.so { color:var(--yellow); }
+
+/* ── GEO MAP ── */
+#geo-map { width:100%; height:320px; background:var(--bg0); border:1px solid var(--border); position:relative; overflow:hidden; }
+#geo-svg { width:100%; height:100%; }
+.geo-dot { cursor:pointer; transition:r 0.2s; }
+.geo-dot:hover { r:10; }
+.geo-tooltip { position:absolute; background:rgba(5,13,20,0.95); border:1px solid var(--accent); padding:8px 12px; font-size:10px; pointer-events:none; display:none; z-index:10; white-space:nowrap; }
+
+/* ── ENRICHMENT PANEL ── */
+.enrich-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.enrich-card { background:var(--bg0); border:1px solid var(--border); padding:14px; }
+.ec-ip { font-family:'Bebas Neue'; font-size:20px; color:var(--accent); letter-spacing:2px; margin-bottom:10px; }
+.ec-field { display:flex; justify-content:space-between; align-items:center; padding:4px 0; border-bottom:1px solid var(--border); font-size:10px; }
+.ec-label { color:var(--text2); letter-spacing:1px; }
+.ec-val { color:var(--text); font-weight:500; }
+.flag-row { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+.flag-pill { font-size:9px; padding:2px 8px; border:1px solid currentColor; }
+
+/* ── RISK SCORER ── */
+.risk-gauge-wrap { display:flex; align-items:center; justify-content:center; gap:24px; margin:8px 0; }
+.gauge-svg { filter:drop-shadow(0 0 12px rgba(255,41,82,0.3)); }
+.risk-breakdown { display:flex; flex-direction:column; gap:6px; flex:1; }
+.rb-item { display:flex; align-items:center; gap:8px; font-size:10px; }
+.rb-bar-wrap { flex:1; height:8px; background:var(--border); }
+.rb-bar { height:100%; transition:width 1s ease-out; }
+
+/* ── CHARTS ── */
+.chart-wrap { position:relative; padding:8px 0; }
+canvas { display:block; }
+
+/* ── TIMELINE ── */
+#tl-canvas { width:100%; height:100px; display:block; }
+
+/* ── APM CHART (attacks per minute) ── */
+#apm-canvas { width:100%; height:100px; display:block; }
+
+/* ── MODAL ── */
+.modal-overlay { position:fixed; inset:0; z-index:1000; background:rgba(2,5,9,0.92); display:none; align-items:center; justify-content:center; backdrop-filter:blur(6px); }
+.modal-overlay.open { display:flex; }
+.modal { background:var(--bg1); border:1px solid var(--accent); padding:24px; max-width:640px; width:90%; box-shadow:0 0 50px rgba(0,200,255,0.15); position:relative; max-height:85vh; overflow-y:auto; }
+.modal-close { position:absolute; top:12px; right:16px; background:none; border:none; color:var(--text2); font-size:18px; cursor:pointer; font-family:'JetBrains Mono'; }
+.modal-close:hover { color:var(--red); }
+.modal-title { font-family:'Bebas Neue'; font-size:22px; color:var(--accent); letter-spacing:3px; margin-bottom:18px; }
+.mf { margin-bottom:10px; }
+.mf-l { font-size:9px; color:var(--text2); letter-spacing:2px; text-transform:uppercase; margin-bottom:3px; }
+.mf-v { font-size:12px; color:var(--text); word-break:break-all; }
+.mitre-block { background:rgba(176,96,255,0.08); border:1px solid rgba(176,96,255,0.3); padding:12px; margin-top:12px; }
+.score-block { background:rgba(0,200,255,0.05); border:1px solid var(--border2); padding:12px; margin-top:12px; }
+
+/* ── SCROLLBARS ── */
+::-webkit-scrollbar { width:4px; height:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+/* ── UTILS ── */
+.full { grid-column:1/-1; }
+.text-red { color:var(--red); }
+.text-green { color:var(--accent2); }
+.text-orange { color:var(--orange); }
+.text-yellow { color:var(--yellow); }
+.text-purple { color:var(--purple); }
+.text-dim { color:var(--text2); }
+.mono { font-family:'JetBrains Mono',monospace; }
+
+@media(max-width:1400px) { .stat-row{grid-template-columns:repeat(3,1fr)} .r3{grid-template-columns:1fr 1fr} }
+@media(max-width:900px) { .stat-row{grid-template-columns:repeat(2,1fr)} .r2,.r3,.r13,.r21{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;gap:16px">
+    <div class="logo">Web<em>Guard</em> <span style="font-size:14px;color:var(--text2);letter-spacing:2px">SIEM v2</span></div>
+    <div style="font-size:9px;color:var(--text2);letter-spacing:2px;padding:3px 10px;border:1px solid var(--border2)">ADVANCED SOC PLATFORM</div>
+  </div>
+  <div class="hdr-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE MONITORING</div>
+    <span style="color:var(--text2)">|</span>
+    <span style="color:var(--text2)">ENGINE: <span class="text-green">ONLINE</span></span>
+    <span style="color:var(--text2)">|</span>
+    <div id="hdr-clock">00:00:00</div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-tab active" onclick="showPage('overview',this)">OVERVIEW</div>
+  <div class="nav-tab" onclick="showPage('alerts',this)">LIVE ALERTS</div>
+  <div class="nav-tab" onclick="showPage('enrichment',this)">THREAT INTEL</div>
+  <div class="nav-tab" onclick="showPage('mitre',this)">MITRE ATT&CK</div>
+  <div class="nav-tab" onclick="showPage('risk',this)">RISK SCORES</div>
+  <div class="nav-tab" onclick="showPage('geomap',this)">GEO MAP</div>
+  <div class="nav-tab" onclick="showPage('sigma',this)">SIGMA RULES</div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PAGE: OVERVIEW                                         -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page active" id="page-overview">
+
+  <div class="stat-row" id="stat-cards"></div>
+
+  <div class="row r13">
+    <div class="panel">
+      <div class="ph"><div class="ph-title">⚡ Attack Timeline (24h)</div><div class="ph-badge text-green">LIVE</div></div>
+      <div class="pb"><canvas id="tl-canvas"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><div class="ph-title">🚨 Live Alert Feed</div><div class="ph-badge text-red" id="alert-badge">0 ALERTS</div></div>
+      <div class="pb" style="padding:0 14px">
+        <div class="af-head"><span>SEV</span><span>SOURCE IP</span><span>ATTACK TYPE</span><span>COUNTRY</span><span>SCORE</span><span>DESCRIPTION</span></div>
+        <div id="alert-feed"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row r3">
+    <div class="panel">
+      <div class="ph"><div class="ph-title">📊 Attack Distribution</div></div>
+      <div class="pb"><div class="bar-list" id="atk-bars"></div></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><div class="ph-title">📈 Attacks / Minute</div><div class="ph-badge" style="color:var(--accent)">ROLLING</div></div>
+      <div class="pb"><canvas id="apm-canvas"></canvas>
+      <div style="margin-top:8px;font-size:9px;color:var(--text2);display:flex;gap:16px">
+        <span style="color:var(--red)">█ CRITICAL</span><span style="color:var(--orange)">█ HIGH</span>
+        <span style="color:var(--yellow)">█ MEDIUM</span>
+      </div></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><div class="ph-title">🌐 Top Threat IPs</div></div>
+      <div class="pb" style="padding:10px 14px;overflow-x:auto">
+        <table class="ip-tbl" id="ip-tbl"><thead><tr>
+          <th>IP ADDRESS</th><th>COUNTRY</th><th>HITS</th><th>SCORE</th><th>RISK</th>
+        </tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PAGE: LIVE ALERTS (full feed)                          -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page" id="page-alerts">
+  <div class="panel">
+    <div class="ph">
+      <div class="ph-title">🚨 Full Alert Feed — All Events</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <select id="sev-filter" onchange="filterAlerts()" style="background:var(--bg0);border:1px solid var(--border2);color:var(--text);padding:3px 8px;font-size:10px;font-family:'JetBrains Mono'">
+          <option value="">ALL SEVERITY</option>
+          <option value="CRITICAL">CRITICAL</option>
+          <option value="HIGH">HIGH</option>
+          <option value="MEDIUM">MEDIUM</option>
+        </select>
+        <select id="type-filter" onchange="filterAlerts()" style="background:var(--bg0);border:1px solid var(--border2);color:var(--text);padding:3px 8px;font-size:10px;font-family:'JetBrains Mono'">
+          <option value="">ALL TYPES</option>
+        </select>
+        <div class="ph-badge text-red" id="alert-badge2">0</div>
+      </div>
+    </div>
+    <div class="pb" style="padding:0 14px">
+      <div class="af-head"><span>SEV</span><span>SOURCE IP</span><span>ATTACK TYPE</span><span>COUNTRY</span><span>SCORE</span><span>DESCRIPTION</span></div>
+      <div id="alert-feed-full" style="height:calc(100vh - 240px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PAGE: THREAT INTEL ENRICHMENT                          -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page" id="page-enrichment">
+  <div class="row r2" style="margin-bottom:14px">
+    <div class="panel">
+      <div class="ph"><div class="ph-title">🔍 IP Enrichment Lookup</div><div class="ph-badge" style="color:var(--accent2)">LIVE DEMO</div></div>
+      <div class="pb">
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <input id="ip-lookup" value="185.220.101.45" placeholder="Enter IP address..." style="flex:1;background:var(--bg0);border:1px solid var(--border2);color:var(--text);padding:8px 12px;font-size:12px;font-family:'JetBrains Mono';outline:none">
+          <button onclick="lookupIP()" style="background:rgba(0,200,255,0.1);border:1px solid var(--accent);color:var(--accent);padding:8px 16px;cursor:pointer;font-family:'JetBrains Mono';font-size:11px;letter-spacing:1px">ENRICH</button>
+        </div>
+        <div id="ip-result"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="ph"><div class="ph-title">📡 API Integration Guide</div></div>
+      <div class="pb" style="font-size:11px;line-height:1.9;color:var(--text2)">
+        <div style="margin-bottom:10px;color:var(--accent)">Real-World API Connections:</div>
+        <div style="background:var(--bg0);border:1px solid var(--border);padding:12px;font-size:10px;line-height:1.8;white-space:pre-wrap"><span style="color:var(--accent2)"># 1. ipinfo.io (Free — 50k req/month)</span>
+curl ipinfo.io/{IP}?token=<span style="color:var(--yellow)">YOUR_TOKEN</span>
+
+<span style="color:var(--accent2)"># 2. AbuseIPDB (Free — 1000 req/day)</span>
+curl -G https://api.abuseipdb.com/api/v2/check \
+  -d ipAddress={IP} \
+  -H "Key: <span style="color:var(--yellow)">YOUR_KEY</span>"
+
+<span style="color:var(--accent2)"># 3. Python integration</span>
+enricher = ThreatIntelEnricher(
+  ipinfo_token=<span style="color:var(--yellow)">"TOKEN"</span>,
+  abuseipdb_key=<span style="color:var(--yellow)">"KEY"</span>
+)
+result = enricher.enrich(<span style="color:var(--yellow)">"185.220.101.45"</span>)</div>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="ph"><div class="ph-title">🌐 Enriched Threat Actors</div><div class="ph-badge" style="color:var(--accent)">ALL TRACKED IPs</div></div>
+    <div class="pb">
+      <div class="enrich-grid" id="enrich-cards"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PAGE: MITRE ATT&CK                                     -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page" id="page-mitre">
+  <div class="row r2">
+    <div class="panel">
+      <div class="ph"><div class="ph-title">🎯 MITRE ATT&CK Mapping</div><div class="ph-badge text-purple">ATT&CK v14</div></div>
+      <div class="pb" style="overflow-x:auto">
+        <table class="mitre-tbl" id="mitre-tbl">
+          <thead><tr><th>ATTACK TYPE</th><th>TECHNIQUE ID</th><th>TECHNIQUE NAME</th><th>TACTIC</th><th>ALERTS</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="ph"><div class="ph-title">📊 Tactic Distribution</div></div>
+      <div class="pb"><div class="chart-wrap" style="height:280px"><canvas id="tactic-chart"></canvas></div></div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="ph"><div class="ph-title">🗺️ ATT&CK Kill Chain</div></div>
+    <div class="pb" id="killchain"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PAGE: RISK SCORES                                      -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page" id="page-risk">
+  <div class="row r2">
+    <div class="panel">
+      <div class="ph"><div class="ph-title">🔴 IP Risk Leaderboard</div><div class="ph-badge text-red">RANKED</div></div>
+      <div class="pb" id="risk-leaderboard"></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><div class="ph-title">📊 Risk Score Distribution</div></div>
+      <div class="pb"><div class="chart-wrap" style="height:280px"><canvas id="risk-chart"></canvas></div></div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="ph"><div class="ph-title">⚡ Per-Attack Risk Scores</div></div>
+    <div class="pb"><div class="bar-list" id="risk-bars"></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PAGE: GEO MAP                                          -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page" id="page-geomap">
+  <div class="row r21">
+    <div class="panel">
+      <div class="ph"><div class="ph-title">🌍 Geographic Attack Origin Map</div><div class="ph-badge" style="color:var(--accent)">REAL-TIME</div></div>
+      <div style="position:relative">
+        <div id="geo-map">
+          <svg id="geo-svg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet"></svg>
+          <div class="geo-tooltip" id="geo-tooltip"></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="ph"><div class="ph-title">🌐 Country Breakdown</div></div>
+      <div class="pb">
+        <div class="bar-list" id="country-bars"></div>
+        <div style="margin-top:16px">
+          <div class="ph-title" style="margin-bottom:10px">TOP THREAT NATIONS</div>
+          <div id="country-list" style="font-size:10px;display:flex;flex-direction:column;gap:6px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PAGE: SIGMA RULES                                      -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page" id="page-sigma">
+  <div class="row r2">
+    <div class="panel">
+      <div class="ph"><div class="ph-title">📋 Sigma Rule Library</div><div class="ph-badge" style="color:var(--accent2)">EXPORT READY</div></div>
+      <div class="pb">
+        <div class="sigma-tabs" id="sigma-tabs"></div>
+        <div class="sigma-code" id="sigma-display"></div>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button onclick="copySigma()" style="background:rgba(0,200,255,0.08);border:1px solid var(--accent);color:var(--accent);padding:6px 14px;cursor:pointer;font-family:'JetBrains Mono';font-size:10px;letter-spacing:1px">COPY RULE</button>
+          <button onclick="downloadSigma()" style="background:rgba(0,255,170,0.05);border:1px solid var(--accent2);color:var(--accent2);padding:6px 14px;cursor:pointer;font-family:'JetBrains Mono';font-size:10px;letter-spacing:1px">DOWNLOAD .YML</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="ph"><div class="ph-title">🔍 SIEM Platform Queries</div></div>
+      <div class="pb">
+        <div class="sigma-tabs" id="query-tabs"></div>
+        <div class="sigma-code" id="query-display"></div>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="ph"><div class="ph-title">🔐 Payload Analyzer</div><div class="ph-badge" style="color:var(--yellow)">INTERACTIVE</div></div>
+    <div class="pb">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div>
+          <div style="font-size:9px;color:var(--text2);letter-spacing:2px;margin-bottom:6px">INPUT PAYLOAD</div>
+          <textarea id="payload-in" style="width:100%;height:80px;background:var(--bg0);border:1px solid var(--border2);color:var(--text);padding:10px;font-family:'JetBrains Mono';font-size:11px;resize:vertical;outline:none" placeholder="Paste attack payload, URI, or encoded string..."></textarea>
+          <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+            <button onclick="analyzePayload()" style="background:rgba(0,200,255,0.1);border:1px solid var(--accent);color:var(--accent);padding:5px 12px;cursor:pointer;font-family:'JetBrains Mono';font-size:10px">ANALYZE</button>
+            <button onclick="decode('url')" style="background:rgba(0,200,255,0.04);border:1px solid var(--border2);color:var(--text2);padding:5px 10px;cursor:pointer;font-family:'JetBrains Mono';font-size:10px">URL DEC</button>
+            <button onclick="decode('b64')" style="background:rgba(0,200,255,0.04);border:1px solid var(--border2);color:var(--text2);padding:5px 10px;cursor:pointer;font-family:'JetBrains Mono';font-size:10px">BASE64</button>
+            <button onclick="decode('html')" style="background:rgba(0,200,255,0.04);border:1px solid var(--border2);color:var(--text2);padding:5px 10px;cursor:pointer;font-family:'JetBrains Mono';font-size:10px">HTML DEC</button>
+            <button onclick="decode('hex')" style="background:rgba(0,200,255,0.04);border:1px solid var(--border2);color:var(--text2);padding:5px 10px;cursor:pointer;font-family:'JetBrains Mono';font-size:10px">HEX DEC</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;color:var(--text2);letter-spacing:2px;margin-bottom:6px">ANALYSIS OUTPUT</div>
+          <div id="payload-out" style="background:var(--bg0);border:1px solid var(--border);padding:12px;font-size:10px;min-height:80px;max-height:120px;overflow-y:auto;color:var(--text2);line-height:1.7">// Analysis output will appear here</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ALERT DETAIL MODAL                                     -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modal-title">Alert Detail</div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+<script>
+// ════════════════════════════════════════════════════════════════
+//  WEBGUARD SIEM v2 — COMPLETE DATA + LOGIC ENGINE
+// ════════════════════════════════════════════════════════════════
+
+// ── THREAT INTELLIGENCE DATABASE ────────────────────────────────
+const THREAT_DB = {
+  "185.220.101.45": { country:"Netherlands", cc:"NL", asn:"AS204895", org:"Tuxis BV",
+    rep:97, tor:true, vpn:false, reports:2841, types:["TOR Exit Node","Attack Source"],
+    lat:52.374, lon:4.890, flags:["🧅 TOR","☠️ Malicious"] },
+  "45.33.32.156":   { country:"United States", cc:"US", asn:"AS63949", org:"Linode LLC",
+    rep:72, tor:false, vpn:false, reports:892, types:["Scanning","Brute Force"],
+    lat:39.428, lon:-74.497, flags:["⚠️ Suspicious"] },
+  "198.51.100.12":  { country:"Germany", cc:"DE", asn:"AS24940", org:"Hetzner Online",
+    rep:88, tor:false, vpn:true, reports:1205, types:["VPN/Proxy","Web Attacks"],
+    lat:49.452, lon:11.077, flags:["🔒 VPN","☠️ Malicious"] },
+  "203.0.113.77":   { country:"Russia", cc:"RU", asn:"AS197695", org:"REG.RU",
+    rep:94, tor:false, vpn:false, reports:3210, types:["Malware","SQLi"],
+    lat:55.756, lon:37.617, flags:["☠️ Malicious"] },
+  "172.16.254.1":   { country:"China", cc:"CN", asn:"AS4134", org:"China Telecom",
+    rep:85, tor:false, vpn:false, reports:1847, types:["Brute Force","Credential Stuffing"],
+    lat:39.904, lon:116.407, flags:["☠️ Malicious"] },
+  "10.0.0.99":      { country:"Internal", cc:"INT", asn:"RFC1918", org:"Private LAN",
+    rep:45, tor:false, vpn:false, reports:0, types:["Insider Threat"],
+    lat:0, lon:0, flags:["⚠️ Internal"] },
+};
+
+// ── MITRE ATT&CK MAP ────────────────────────────────────────────
+const MITRE = {
+  "SQL_INJECTION":     { id:"T1190",    name:"Exploit Public-Facing Application", tactic:"Initial Access",     tid:"TA0001", color:"#ff2952" },
+  "XSS":               { id:"T1059.007",name:"JavaScript Interpreter",            tactic:"Execution",          tid:"TA0002", color:"#ff7a00" },
+  "LFI":               { id:"T1083",    name:"File and Directory Discovery",       tactic:"Discovery",          tid:"TA0007", color:"#ff2952" },
+  "RFI":               { id:"T1190",    name:"Exploit Public-Facing Application", tactic:"Initial Access",     tid:"TA0001", color:"#ff2952" },
+  "COMMAND_INJECTION": { id:"T1059",    name:"Command and Scripting Interpreter",  tactic:"Execution",          tid:"TA0002", color:"#ff2952" },
+  "DIR_TRAVERSAL":     { id:"T1083",    name:"File and Directory Discovery",       tactic:"Discovery",          tid:"TA0007", color:"#ff7a00" },
+  "ENCODED_ATTACK":    { id:"T1027",    name:"Obfuscated Files or Information",    tactic:"Defense Evasion",    tid:"TA0005", color:"#ff7a00" },
+  "BRUTE_FORCE":       { id:"T1110",    name:"Brute Force",                        tactic:"Credential Access",  tid:"TA0006", color:"#ff2952" },
+  "SCANNER_TOOL":      { id:"T1595",    name:"Active Scanning",                    tactic:"Reconnaissance",     tid:"TA0043", color:"#ff7a00" },
+  "ERROR_SPIKE":       { id:"T1595.001",name:"Scanning IP Blocks",                 tactic:"Reconnaissance",     tid:"TA0043", color:"#ffd000" },
+  "404_CASCADE":       { id:"T1595.001",name:"Scanning IP Blocks",                 tactic:"Reconnaissance",     tid:"TA0043", color:"#ffd000" },
+};
+
+// ── RISK BASE SCORES ─────────────────────────────────────────────
+const BASE_SCORES = {
+  SQL_INJECTION:9, COMMAND_INJECTION:10, LFI:8.5, RFI:9.5, XSS:7,
+  DIR_TRAVERSAL:7.5, ENCODED_ATTACK:7, BRUTE_FORCE:8,
+  SCANNER_TOOL:5, ERROR_SPIKE:5.5, "404_CASCADE":4.5,
+};
+
+// ── SEED DATA ────────────────────────────────────────────────────
+const COUNTS = {
+  SQL_INJECTION:47, XSS:31, LFI:28, COMMAND_INJECTION:18,
+  DIR_TRAVERSAL:22, ENCODED_ATTACK:15, BRUTE_FORCE:40,
+  SCANNER_TOOL:35, ERROR_SPIKE:8, "404_CASCADE":12,
+};
+const IPS   = Object.keys(THREAT_DB);
+const SEVS  = { SQL_INJECTION:"CRITICAL",COMMAND_INJECTION:"CRITICAL",LFI:"CRITICAL",
+                RFI:"CRITICAL",BRUTE_FORCE:"CRITICAL",XSS:"HIGH",DIR_TRAVERSAL:"HIGH",
+                ENCODED_ATTACK:"HIGH",SCANNER_TOOL:"HIGH",ERROR_SPIKE:"MEDIUM","404_CASCADE":"MEDIUM" };
+const URIS  = {
+  SQL_INJECTION:["/login?username=%27+OR+%271%27%3D%271","/search?q='+UNION+SELECT+null,pass--"],
+  XSS:["/search?q=%3Cscript%3Ealert%281%29%3C%2Fscript%3E","/comment?text=%3Cimg+onerror%3Dalert(1)%3E"],
+  LFI:["/page?file=../../../../etc/passwd","/view?doc=php://filter/convert.base64-encode/resource=index.php"],
+  COMMAND_INJECTION:["/ping?host=127.0.0.1%3B+cat+/etc/passwd","/exec?cmd=%60id%60"],
+  DIR_TRAVERSAL:["/download?path=..%2F..%2F..%2Fetc%2Fshadow"],
+  ENCODED_ATTACK:["/search?q=%2527%2520OR%25201%253D1--","/id=PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg=="],
+  BRUTE_FORCE:["/login (POST — 401)"],
+  SCANNER_TOOL:["/.env","/.git/config","/wp-admin/","/phpmyadmin/"],
+  ERROR_SPIKE:["Multiple probe endpoints"],
+  "404_CASCADE":["Rapid directory enumeration"],
+};
+
+let allAlerts = [];
+let ipHits    = {};
+let sevCounts = {CRITICAL:0,HIGH:0,MEDIUM:0,LOW:0};
+let typeCounts= {};
+let tlBuckets = Array(24).fill(null).map(()=>({C:0,H:0,M:0,L:0}));
+let apmHistory= Array(30).fill(0); // rolling 30-point attacks/minute
+let apmChart, tacticChart, riskChart;
+
+function computeRisk(type, intel) {
+  let s = BASE_SCORES[type] || 5;
+  if (intel) {
+    if (intel.tor)     s += 1.5;
+    if (intel.vpn)     s += 0.8;
+    if (intel.rep>=80) s += 2.0;
+    else if(intel.rep>=50) s += 0.5;
+  }
+  return Math.min(10, Math.round(s * 10) / 10);
+}
+
+function threatLevel(score100) {
+  if (score100>=80) return {l:"CRITICAL",c:"var(--red)"};
+  if (score100>=50) return {l:"HIGH",    c:"var(--orange)"};
+  if (score100>=20) return {l:"MEDIUM",  c:"var(--yellow)"};
+  return               {l:"LOW",      c:"var(--accent2)"};
+}
+
+function seedData() {
+  Object.entries(COUNTS).forEach(([type, count]) => {
+    typeCounts[type] = count;
+    const uris = URIS[type] || ["/unknown"];
+    for (let i = 0; i < count; i++) {
+      const ip    = IPS[Math.floor(Math.random() * IPS.length)];
+      const intel = THREAT_DB[ip];
+      const sev   = SEVS[type] || "MEDIUM";
+      const score = computeRisk(type, intel);
+      const m     = MITRE[type] || {};
+      allAlerts.push({
+        id: allAlerts.length, type, sev, ip, score,
+        uri: uris[i % uris.length],
+        country: intel?.country || "Unknown",
+        cc: intel?.cc || "??",
+        ts: new Date(Date.now() - Math.random()*7200000).toISOString(),
+        mitre: m,
+        intel,
+        desc: descFor(type, ip),
+      });
+      sevCounts[sev]++;
+      ipHits[ip] = (ipHits[ip] || 0) + 1;
+      const b = Math.floor(Math.random() * 24);
+      if (sev==="CRITICAL") tlBuckets[b].C++;
+      else if(sev==="HIGH")   tlBuckets[b].H++;
+      else if(sev==="MEDIUM") tlBuckets[b].M++;
+      else                    tlBuckets[b].L++;
+    }
+  });
+  allAlerts.sort((a,b)=>new Date(b.ts)-new Date(a.ts));
+}
+
+function descFor(t,ip) {
+  const m={
+    SQL_INJECTION:`SQLi payload in URI from ${ip}`,
+    XSS:`XSS vector detected in request from ${ip}`,
+    LFI:`Path traversal / LFI from ${ip}`,
+    COMMAND_INJECTION:`OS command injection from ${ip}`,
+    DIR_TRAVERSAL:`Directory traversal from ${ip}`,
+    ENCODED_ATTACK:`Encoded/obfuscated attack from ${ip}`,
+    BRUTE_FORCE:`Brute force login — ${ip}`,
+    SCANNER_TOOL:`Scanner tool detected — ${ip}`,
+    ERROR_SPIKE:`High error rate spike — ${ip}`,
+    "404_CASCADE":`404 flood (dir bruteforce) — ${ip}`,
+  };
+  return m[t] || `Suspicious activity from ${ip}`;
+}
+
+// ── RENDERERS ────────────────────────────────────────────────────
+
+function renderStatCards() {
+  const total = allAlerts.length;
+  const uniqueIPs = Object.keys(ipHits).length;
+  const cards = [
+    {l:"Total Alerts",     v:total,                  c:"#00c8ff"},
+    {l:"Critical",         v:sevCounts.CRITICAL,     c:"#ff2952"},
+    {l:"High",             v:sevCounts.HIGH,          c:"#ff7a00"},
+    {l:"Unique Threat IPs",v:uniqueIPs,              c:"#00ffaa"},
+    {l:"SQLi Events",      v:typeCounts.SQL_INJECTION||0, c:"#ff2952"},
+    {l:"Encoded Attacks",  v:typeCounts.ENCODED_ATTACK||0, c:"#ffd000"},
+  ];
+  document.getElementById("stat-cards").innerHTML = cards.map(c=>`
+    <div class="card" style="--cc:${c.c}">
+      <div class="card-label">${c.l}</div>
+      <div class="card-val">${c.v}</div>
+    </div>`).join("");
+}
+
+function makeAlertRow(a, onclick_id) {
+  const tl = threatLevel(a.score*10);
+  const scoreColor = tl.c;
+  return `<div class="af-row" onclick="showModal(${onclick_id !== undefined ? onclick_id : a.id})">
+    <span class="sev sev-${a.sev}">${a.sev}</span>
+    <span class="af-ip">${a.ip}</span>
+    <span class="af-type">${a.type.replace(/_/g," ")}</span>
+    <span class="af-country">${a.country}</span>
+    <span class="af-score" style="color:${scoreColor};font-weight:700">${a.score}/10</span>
+    <span class="af-desc">${a.desc}</span>
+  </div>`;
+}
+
+function renderAlertFeed() {
+  document.getElementById("alert-feed").innerHTML = allAlerts.slice(0,50).map(a=>makeAlertRow(a)).join("");
+  document.getElementById("alert-badge").textContent = `${allAlerts.length} ALERTS`;
+}
+
+function renderAlertFeedFull() {
+  document.getElementById("alert-feed-full").innerHTML = allAlerts.map(a=>makeAlertRow(a)).join("");
+  document.getElementById("alert-badge2").textContent = allAlerts.length;
+  // Populate type filter
+  const tf = document.getElementById("type-filter");
+  const types = [...new Set(allAlerts.map(a=>a.type))].sort();
+  if (tf.options.length <= 1) {
+    types.forEach(t => { const o=document.createElement("option"); o.value=t; o.textContent=t.replace(/_/g," "); tf.appendChild(o); });
+  }
+}
+
+function filterAlerts() {
+  const sev  = document.getElementById("sev-filter").value;
+  const type = document.getElementById("type-filter").value;
+  const filtered = allAlerts.filter(a =>
+    (!sev  || a.sev === sev) &&
+    (!type || a.type === type)
+  );
+  document.getElementById("alert-feed-full").innerHTML = filtered.map(a=>makeAlertRow(a)).join("");
+  document.getElementById("alert-badge2").textContent = filtered.length;
+}
+
+function renderAtkBars() {
+  const sorted = Object.entries(typeCounts).sort((a,b)=>b[1]-a[1]);
+  const max = sorted[0][1];
+  const colors = ["#ff2952","#ff2952","#ff2952","#ff7a00","#ff7a00","#ff7a00","#ff7a00","#ffd000","#ffd000","#00ffaa"];
+  document.getElementById("atk-bars").innerHTML = sorted.map(([t,n],i)=>`
+    <div class="bi">
+      <div class="bi-label">${t.replace(/_/g," ")}</div>
+      <div class="bi-track"><div class="bi-fill" data-pct="${(n/max*100).toFixed(0)}" style="background:${colors[i]};box-shadow:0 0 6px ${colors[i]}66"></div></div>
+      <div class="bi-n" style="color:${colors[i]}">${n}</div>
+    </div>`).join("");
+  setTimeout(()=>document.querySelectorAll(".bi-fill").forEach(b=>b.style.width=b.dataset.pct+"%"),100);
+}
+
+function renderIPTable() {
+  const sorted = Object.entries(ipHits).sort((a,b)=>b[1]-a[1]);
+  const max = sorted[0][1];
+  document.querySelector("#ip-tbl tbody").innerHTML = sorted.map(([ip,hits])=>{
+    const intel = THREAT_DB[ip]||{};
+    const totalScore = (BASE_SCORES.SQL_INJECTION||5) * hits * 0.4;
+    const tl = threatLevel(totalScore > 100 ? 95 : totalScore);
+    return `<tr>
+      <td style="color:var(--accent);font-size:10px">${ip}</td>
+      <td style="color:var(--text2);font-size:10px">${intel.country||"?"} ${intel.flags?.[0]||""}</td>
+      <td style="font-weight:700;color:var(--text)">${hits}</td>
+      <td>
+        <span class="risk-bar-wrap"><span class="risk-bar" style="width:${(hits/max*100).toFixed(0)}%"></span></span>
+        <span style="margin-left:6px;color:var(--red);font-size:10px">${hits}</span>
+      </td>
+      <td><span class="score-pill" style="color:${tl.c};border-color:${tl.c}">${tl.l}</span></td>
+    </tr>`;
+  }).join("");
+}
+
+function renderTimeline() {
+  const canvas = document.getElementById("tl-canvas");
+  const W = canvas.offsetWidth||600, H=100;
+  canvas.width=W; canvas.height=H;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0,0,W,H);
+  const bw = W/24;
+  const maxV = Math.max(...tlBuckets.map(b=>b.C+b.H+b.M+b.L),1);
+  // grid
+  ctx.strokeStyle="rgba(12,34,53,0.8)"; ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){const y=H-(i/4)*(H-18);ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  const layers=[["L","#00ffaa"],["M","#ffd000"],["H","#ff7a00"],["C","#ff2952"]];
+  tlBuckets.forEach((b,i)=>{
+    let sy=H;
+    layers.forEach(([k,col])=>{
+      const v=b[k]||0; if(!v)return;
+      const bh=(v/maxV)*(H-18);
+      ctx.fillStyle=col+"cc";
+      ctx.fillRect(i*bw+1,sy-bh,bw-2,bh);
+      sy-=bh;
+    });
+  });
+  ctx.fillStyle="#2d6a80"; ctx.font="8px JetBrains Mono"; ctx.textAlign="center";
+  [0,6,12,18,23].forEach(i=>ctx.fillText(`${String(i).padStart(2,"0")}h`,i*bw+bw/2,H-2));
+}
+
+function renderAPM() {
+  const ctx = document.getElementById("apm-canvas").getContext("2d");
+  apmChart = new Chart(ctx, {
+    type:"line",
+    data:{
+      labels: Array(30).fill("").map((_,i)=>`-${30-i}m`),
+      datasets:[
+        {label:"Critical",data:[...apmHistory].map(v=>Math.floor(v*0.4)),borderColor:"#ff2952",backgroundColor:"rgba(255,41,82,0.08)",tension:0.4,fill:true,pointRadius:0,borderWidth:1.5},
+        {label:"High",    data:[...apmHistory].map(v=>Math.floor(v*0.35)),borderColor:"#ff7a00",backgroundColor:"rgba(255,122,0,0.05)",tension:0.4,fill:true,pointRadius:0,borderWidth:1.5},
+        {label:"Medium",  data:[...apmHistory].map(v=>Math.floor(v*0.25)),borderColor:"#ffd000",backgroundColor:"rgba(255,208,0,0.04)",tension:0.4,fill:true,pointRadius:0,borderWidth:1},
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{ticks:{color:"#2d6a80",font:{size:8,family:"JetBrains Mono"}},grid:{color:"rgba(12,34,53,0.6)"}},
+        y:{ticks:{color:"#2d6a80",font:{size:8,family:"JetBrains Mono"}},grid:{color:"rgba(12,34,53,0.6)"},min:0}
+      },
+      animation:{duration:200}
+    }
+  });
+  document.getElementById("apm-canvas").style.height="100px";
+}
+
+function updateAPM() {
+  const newVal = Math.floor(Math.random()*12 + 2);
+  apmHistory.shift(); apmHistory.push(newVal);
+  if(apmChart) {
+    apmChart.data.datasets[0].data = apmHistory.map(v=>Math.floor(v*0.4));
+    apmChart.data.datasets[1].data = apmHistory.map(v=>Math.floor(v*0.35));
+    apmChart.data.datasets[2].data = apmHistory.map(v=>Math.floor(v*0.25));
+    apmChart.update("none");
+  }
+}
+
+// ── ENRICHMENT PAGE ───────────────────────────────────────────────
+
+function lookupIP() {
+  const ip = document.getElementById("ip-lookup").value.trim();
+  const intel = THREAT_DB[ip];
+  const el = document.getElementById("ip-result");
+  if(!intel) {
+    el.innerHTML=`<div style="color:var(--text2);font-size:11px;padding:12px">
+      IP not in offline database. In production, this would call ipinfo.io / AbuseIPDB.<br>
+      <span style="color:var(--accent)">Try: 185.220.101.45, 203.0.113.77, 172.16.254.1</span>
+    </div>`; return;
+  }
+  const tl = threatLevel(intel.rep);
+  el.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    ${enrichCard(ip, intel)}
+    <div style="background:var(--bg0);border:1px solid var(--border);padding:14px;font-size:10px">
+      <div style="color:var(--accent);margin-bottom:10px;font-weight:700">WORKFLOW TRACE</div>
+      <div style="color:var(--text2);line-height:2">
+        1. Alert triggered by detection engine<br>
+        2. IP extracted → enricher.enrich("${ip}")<br>
+        3. ipinfo.io: Country=${intel.country}, ASN=${intel.asn}<br>
+        4. AbuseIPDB: Score=${intel.rep}/100, Reports=${intel.reports}<br>
+        5. TOR check: ${intel.tor?"⚠️ TOR Exit Node":"✓ Not TOR"}<br>
+        6. Risk level: <span style="color:${tl.c}">${tl.l}</span><br>
+        7. Alert enriched + MITRE mapped<br>
+        8. SOC analyst notified
+      </div>
+    </div>
+  </div>`;
+}
+
+function enrichCard(ip, intel) {
+  if(!intel) return "";
+  const tl = threatLevel(intel.rep);
+  const repBar = `<div style="width:${intel.rep}%;height:4px;background:${tl.c};transition:width 1s ease"></div>`;
+  return `<div class="enrich-card">
+    <div class="ec-ip">${ip}</div>
+    ${[
+      ["Country",    `${intel.country} (${intel.cc})`],
+      ["ASN",        intel.asn],
+      ["Org / ISP",  intel.org],
+      ["TOR Node",   intel.tor?"<span style='color:var(--red)'>YES ☠️</span>":"No"],
+      ["VPN/Proxy",  intel.vpn?"<span style='color:var(--orange)'>YES</span>":"No"],
+      ["Reputation", `<div style="margin-top:2px"><div style="background:var(--border);height:4px;width:100%">${repBar}</div><span style="color:${tl.c}">${intel.rep}/100 — ${tl.l}</span></div>`],
+      ["Reports",    `${intel.reports.toLocaleString()} abuse reports`],
+      ["Threat Types",intel.types.join(", ")],
+    ].map(([l,v])=>`<div class="ec-field"><span class="ec-label">${l}</span><span class="ec-val">${v}</span></div>`).join("")}
+    <div class="flag-row">${(intel.flags||[]).map(f=>`<span class="flag-pill" style="color:var(--red);border-color:rgba(255,41,82,0.4)">${f}</span>`).join("")}</div>
+  </div>`;
+}
+
+function renderEnrichCards() {
+  document.getElementById("enrich-cards").innerHTML =
+    Object.entries(THREAT_DB).map(([ip,intel])=>enrichCard(ip,intel)).join("");
+}
+
+// ── MITRE PAGE ────────────────────────────────────────────────────
+
+function renderMITRETable() {
+  const tbody = document.querySelector("#mitre-tbl tbody");
+  tbody.innerHTML = Object.entries(MITRE).map(([type,m])=>{
+    const count = typeCounts[type]||0;
+    return `<tr>
+      <td style="color:var(--text);font-size:10px">${type.replace(/_/g," ")}</td>
+      <td><span class="tech-id">${m.id}</span></td>
+      <td style="color:var(--text);font-size:10px">${m.name}</td>
+      <td><span class="tactic-badge">${m.tactic}</span></td>
+      <td style="color:var(--accent);font-weight:700">${count}</td>
+    </tr>`;
+  }).join("");
+}
+
+function renderTacticChart() {
+  const tacticMap = {};
+  Object.entries(MITRE).forEach(([type,m])=>{
+    tacticMap[m.tactic] = (tacticMap[m.tactic]||0) + (typeCounts[type]||0);
+  });
+  const labels = Object.keys(tacticMap);
+  const data   = Object.values(tacticMap);
+  const colors = ["#ff2952","#ff7a00","#ffd000","#00ffaa","#00c8ff","#b060ff"];
+  const ctx = document.getElementById("tactic-chart").getContext("2d");
+  tacticChart = new Chart(ctx,{
+    type:"doughnut",
+    data:{labels, datasets:[{data, backgroundColor:colors.map(c=>c+"cc"), borderColor:colors, borderWidth:1}]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{position:"right",labels:{color:"#6ab8d4",font:{size:10,family:"JetBrains Mono"},boxWidth:12}},
+      }
+    }
+  });
+}
+
+function renderKillChain() {
+  const phases = [
+    {name:"Reconnaissance",  tid:"TA0043", attacks:["SCANNER_TOOL","ERROR_SPIKE","404_CASCADE"], color:"#b060ff"},
+    {name:"Initial Access",   tid:"TA0001", attacks:["SQL_INJECTION","LFI","RFI"],               color:"#ff2952"},
+    {name:"Execution",        tid:"TA0002", attacks:["COMMAND_INJECTION","XSS"],                  color:"#ff7a00"},
+    {name:"Defense Evasion",  tid:"TA0005", attacks:["ENCODED_ATTACK"],                           color:"#ffd000"},
+    {name:"Discovery",        tid:"TA0007", attacks:["DIR_TRAVERSAL"],                             color:"#00c8ff"},
+    {name:"Credential Access",tid:"TA0006", attacks:["BRUTE_FORCE"],                              color:"#ff7a00"},
+  ];
+  document.getElementById("killchain").innerHTML = `
+    <div style="display:flex;gap:0;overflow-x:auto;padding:8px 0">
+    ${phases.map((p,i)=>`
+      <div style="flex:1;min-width:140px;border:1px solid ${p.color}44;border-right:${i<phases.length-1?"none":"1px solid "+p.color+"44"};padding:12px;position:relative;background:${p.color}08">
+        <div style="font-size:9px;color:${p.color};letter-spacing:1.5px;font-weight:700;margin-bottom:6px">${p.tid}</div>
+        <div style="font-size:11px;color:var(--text);margin-bottom:8px;font-weight:700">${p.name}</div>
+        ${p.attacks.map(a=>`<div style="font-size:9px;color:var(--text2);padding:2px 0">▸ ${a.replace(/_/g," ")} <span style="color:${p.color};font-weight:700">(${typeCounts[a]||0})</span></div>`).join("")}
+        ${i<phases.length-1?`<div style="position:absolute;right:-10px;top:50%;transform:translateY(-50%);color:${p.color};font-size:16px;z-index:1">›</div>`:""}
+      </div>`).join("")}
+    </div>`;
+}
+
+// ── RISK PAGE ─────────────────────────────────────────────────────
+
+function renderRiskLeaderboard() {
+  const ipScores = Object.entries(ipHits).map(([ip,hits])=>{
+    const intel = THREAT_DB[ip]||{};
+    let score = 0;
+    allAlerts.filter(a=>a.ip===ip).forEach(a=>score+=a.score);
+    if(intel.tor) score *= 1.15;
+    if(intel.rep>=80) score *= 1.1;
+    return {ip, score:Math.round(score*10)/10, hits, intel, tl:threatLevel(score>100?99:score)};
+  }).sort((a,b)=>b.score-a.score);
+
+  const max = ipScores[0]?.score||1;
+  document.getElementById("risk-leaderboard").innerHTML = ipScores.map((s,i)=>`
+    <div style="display:grid;grid-template-columns:24px 140px 80px 1fr 80px 80px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:10px">
+      <span style="color:var(--text2)">#${i+1}</span>
+      <span style="color:var(--accent)">${s.ip}</span>
+      <span style="color:var(--text2)">${s.intel.country||"?"}</span>
+      <div style="background:var(--border);height:8px">
+        <div style="width:${(s.score/max*100).toFixed(0)}%;height:100%;background:${s.tl.c};transition:width 1.2s ease-out;width:0" data-w="${(s.score/max*100).toFixed(0)}"></div>
+      </div>
+      <span style="color:${s.tl.c};font-weight:700">${s.score}</span>
+      <span class="score-pill" style="color:${s.tl.c};border-color:${s.tl.c}">${s.tl.l}</span>
+    </div>`).join("");
+  setTimeout(()=>document.querySelectorAll("[data-w]").forEach(b=>b.style.width=b.dataset.w+"%"),100);
+}
+
+function renderRiskChart() {
+  const scores = Object.entries(BASE_SCORES).sort((a,b)=>b[1]-a[1]);
+  const ctx = document.getElementById("risk-chart").getContext("2d");
+  riskChart = new Chart(ctx,{
+    type:"bar",
+    data:{
+      labels:scores.map(([t])=>t.replace(/_/g," ")),
+      datasets:[{
+        label:"Risk Score (0-10)",
+        data:scores.map(([,s])=>s),
+        backgroundColor:scores.map(([,s])=> s>=9?"#ff2952cc":s>=7?"#ff7a00cc":"#ffd000cc"),
+        borderColor:scores.map(([,s])=> s>=9?"#ff2952":s>=7?"#ff7a00":"#ffd000"),
+        borderWidth:1,
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{ticks:{color:"#2d6a80",font:{size:8,family:"JetBrains Mono"},maxRotation:40},grid:{color:"rgba(12,34,53,0.6)"}},
+        y:{min:0,max:11,ticks:{color:"#2d6a80",font:{size:9,family:"JetBrains Mono"}},grid:{color:"rgba(12,34,53,0.6)"}},
+      }
+    }
+  });
+}
+
+function renderRiskBars() {
+  const sorted = Object.entries(BASE_SCORES).sort((a,b)=>b[1]-a[1]);
+  const cols = {10:"#ff2952",9:"#ff2952",9.5:"#ff2952",8:"#ff7a00",8.5:"#ff2952",7:"#ff7a00",7.5:"#ff7a00",5:"#ffd000",5.5:"#ffd000",4.5:"#00ffaa",4:"#00ffaa"};
+  document.getElementById("risk-bars").innerHTML = sorted.map(([t,s])=>{
+    const c=cols[s]||"#00c8ff";
+    return `<div class="bi">
+      <div class="bi-label">${t.replace(/_/g," ")}</div>
+      <div class="bi-track"><div class="bi-fill" data-pct="${s*10}" style="background:${c}"></div></div>
+      <div class="bi-n" style="color:${c}">${s}</div>
+    </div>`;
+  }).join("");
+  setTimeout(()=>document.querySelectorAll(".bi-fill[data-pct]").forEach(b=>b.style.width=b.dataset.pct+"%"),100);
+}
+
+// ── GEO MAP ───────────────────────────────────────────────────────
+
+function latLonToXY(lat, lon, W, H) {
+  const x = (lon + 180) / 360 * W;
+  const y = (1 - (lat + 90) / 180) * H;
+  return [x, y];
+}
+
+function renderGeoMap() {
+  const svg = document.getElementById("geo-svg");
+  const tt  = document.getElementById("geo-tooltip");
+  const rect = document.getElementById("geo-map").getBoundingClientRect();
+  const W=1000, H=500;
+
+  // Simplified world outline paths (placeholder blobs for major continents)
+  const continents = [
+    // North America
+    "M 120,80 L 200,70 L 250,90 L 260,130 L 230,180 L 200,200 L 150,220 L 120,200 L 100,160 L 90,120 Z",
+    // South America
+    "M 180,230 L 220,220 L 240,250 L 230,320 L 200,370 L 170,360 L 160,310 L 170,260 Z",
+    // Europe
+    "M 440,70 L 510,60 L 530,90 L 520,130 L 490,140 L 460,130 L 440,100 Z",
+    // Africa
+    "M 450,150 L 520,140 L 550,170 L 540,270 L 510,320 L 470,310 L 450,270 L 440,200 Z",
+    // Asia
+    "M 530,60 L 700,50 L 780,80 L 800,130 L 760,170 L 700,190 L 620,200 L 570,180 L 540,140 Z",
+    // Australia
+    "M 720,290 L 800,280 L 820,320 L 790,360 L 740,360 L 710,330 Z",
+  ];
+
+  let html = continents.map(d=>`<path d="${d}" fill="rgba(0,200,255,0.06)" stroke="rgba(0,200,255,0.15)" stroke-width="1"/>`).join("");
+
+  // Grid lines
+  for(let lat=-60;lat<=60;lat+=30) {
+    const [,y]=latLonToXY(lat,0,W,H);
+    html+=`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="rgba(0,200,255,0.06)" stroke-width="1"/>`;
+  }
+  for(let lon=-150;lon<=150;lon+=60) {
+    const [x]=latLonToXY(0,lon,W,H);
+    html+=`<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="rgba(0,200,255,0.06)" stroke-width="1"/>`;
+  }
+
+  // Attack dots
+  Object.entries(THREAT_DB).forEach(([ip,intel])=>{
+    if(!intel.lat && !intel.lon) return;
+    const hits = ipHits[ip]||0;
+    const [x,y] = latLonToXY(intel.lat, intel.lon, W, H);
+    const r = Math.min(4 + hits/8, 18);
+    const tl = threatLevel(intel.rep);
+    html+=`
+      <circle cx="${x}" cy="${y}" r="${r}" fill="${tl.c}88" stroke="${tl.c}" stroke-width="1.5"
+        class="geo-dot"
+        onmouseenter="showGeoTip(event,'${ip}','${intel.country}',${intel.rep},${hits},'${tl.l}','${tl.c}')"
+        onmouseleave="hideGeoTip()"/>
+      <circle cx="${x}" cy="${y}" r="${r+4}" fill="none" stroke="${tl.c}44" stroke-width="1"
+        style="animation:geoRipple 2s ease-out infinite"/>`;
+  });
+
+  // Equator / Prime meridian labels
+  html+=`<text x="5" y="${latLonToXY(0,0,W,H)[1]}" fill="rgba(0,200,255,0.3)" font-size="8" font-family="JetBrains Mono">EQ</text>`;
+
+  svg.innerHTML = html;
+}
+
+function showGeoTip(e,ip,country,rep,hits,level,color) {
+  const tt=document.getElementById("geo-tooltip");
+  tt.style.display="block";
+  tt.style.left=(e.offsetX+12)+"px";
+  tt.style.top=(e.offsetY+12)+"px";
+  tt.innerHTML=`<div style="color:var(--accent);font-weight:700;margin-bottom:4px">${ip}</div>
+    <div>Country: ${country}</div>
+    <div>Attacks: ${hits}</div>
+    <div>AbuseScore: ${rep}/100</div>
+    <div>Risk: <span style="color:${color}">${level}</span></div>`;
+}
+function hideGeoTip(){ document.getElementById("geo-tooltip").style.display="none"; }
+
+function renderCountryBars() {
+  const countryCounts = {};
+  allAlerts.forEach(a=>{ countryCounts[a.country]=(countryCounts[a.country]||0)+1; });
+  const sorted = Object.entries(countryCounts).sort((a,b)=>b[1]-a[1]);
+  const max = sorted[0][1];
+  document.getElementById("country-bars").innerHTML = sorted.slice(0,8).map(([c,n])=>`
+    <div class="bi">
+      <div class="bi-label">${c}</div>
+      <div class="bi-track"><div class="bi-fill" data-pct="${(n/max*100).toFixed(0)}" style="background:var(--accent)"></div></div>
+      <div class="bi-n" style="color:var(--accent)">${n}</div>
+    </div>`).join("");
+  setTimeout(()=>document.querySelectorAll(".bi-fill").forEach(b=>b.style.width=b.dataset.pct+"%"),100);
+
+  const flags={Netherlands:"🇳🇱",Russia:"🇷🇺",China:"🇨🇳",Germany:"🇩🇪","United States":"🇺🇸",Internal:"🏢"};
+  document.getElementById("country-list").innerHTML = sorted.slice(0,6).map(([c,n],i)=>`
+    <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)">
+      <span>${flags[c]||"🌐"} ${c}</span>
+      <span style="color:var(--red);font-weight:700">${n} attacks</span>
+    </div>`).join("");
+}
+
+// ── SIGMA RULES ───────────────────────────────────────────────────
+
+const SIGMA_RULES = {
+  "SQL Injection": `title: SQL Injection Attempt
+id: b5e3b7d1-9e4a-4c8f-8b2d-1a5f3e7c9d0b
+status: stable
+description: Detects SQL injection in web request URIs
+author: WebGuard SIEM
+date: 2024/11/22
+tags:
+  - attack.initial_access
+  - attack.t1190
+  - owasp.a03_2021
+logsource:
+  category: webserver
+detection:
+  selection:
+    c-uri|contains:
+      - "' OR '"
+      - "UNION SELECT"
+      - "UNION ALL SELECT"
+      - "DROP TABLE"
+      - "SLEEP("
+      - "xp_cmdshell"
+      - "information_schema"
+      - "' --"
+  condition: selection
+falsepositives:
+  - Security scanning tools
+  - Penetration testing
+level: critical
+fields:
+  - c-ip
+  - c-uri
+  - cs-User-Agent
+  - sc-status`,
+
+  "XSS": `title: Cross-Site Scripting (XSS) Attempt
+id: a4c2e9f0-8d3b-4e7a-9c1f-2b6d8e0f4a2c
+status: stable
+description: Detects XSS attack vectors in web request URIs
+author: WebGuard SIEM
+date: 2024/11/22
+tags:
+  - attack.execution
+  - attack.t1059.007
+  - owasp.a03_2021
+logsource:
+  category: webserver
+detection:
+  selection:
+    c-uri|contains:
+      - "<script>"
+      - "%3Cscript"
+      - "javascript:"
+      - "onerror="
+      - "onload="
+      - "alert("
+      - "document.cookie"
+      - "<svg/onload"
+  condition: selection
+level: high`,
+
+  "LFI/Path Traversal": `title: Local File Inclusion / Path Traversal
+id: c7f1a3e5-2b8d-4f9c-a0e6-3d5b7c9e1f4a
+status: stable
+description: Detects LFI and directory traversal patterns
+author: WebGuard SIEM
+date: 2024/11/22
+tags:
+  - attack.discovery
+  - attack.t1083
+  - owasp.a01_2021
+logsource:
+  category: webserver
+detection:
+  selection:
+    c-uri|contains:
+      - "../"
+      - "..%2f"
+      - "%2e%2e%2f"
+      - "%252e%252e"
+      - "etc/passwd"
+      - "etc/shadow"
+      - "php://filter"
+      - "/proc/self"
+  condition: selection
+level: critical`,
+
+  "Command Injection": `title: OS Command Injection via Web App
+id: d9e2b4f6-3c7a-4b8e-9d1f-5a8c0e3f7b2d
+status: stable
+description: Detects OS command injection in web parameters
+author: WebGuard SIEM
+date: 2024/11/22
+tags:
+  - attack.execution
+  - attack.t1059
+  - owasp.a03_2021
+logsource:
+  category: webserver
+detection:
+  selection:
+    c-uri|contains:
+      - "; ls"
+      - "; cat"
+      - "| id"
+      - "| whoami"
+      - "\`id\`"
+      - "$(whoami)"
+      - "; wget "
+      - "| nc -e"
+      - "/bin/bash"
+  condition: selection
+level: critical`,
+
+  "Brute Force": `title: Web Application Brute Force
+id: e1c3f5a7-4d9b-4c2e-8f6a-7b9d1f3e5c8a
+status: stable
+description: Detects brute force login via rapid POST 401s
+author: WebGuard SIEM
+date: 2024/11/22
+tags:
+  - attack.credential_access
+  - attack.t1110.001
+logsource:
+  category: webserver
+detection:
+  selection:
+    cs-method: POST
+    c-uri|endswith:
+      - /login
+      - /signin
+      - /auth
+      - /wp-login.php
+    sc-status: 401
+  timeframe: 1m
+  condition: selection | count() by c-ip > 10
+level: high`,
+
+  "Scanner Tools": `title: Web Vulnerability Scanner Detected
+id: f2d4a6c8-5e0b-4d3f-9a7c-8e2f4a6b0d1e
+status: stable
+description: Detects known vulnerability scanner user-agent strings
+author: WebGuard SIEM
+date: 2024/11/22
+tags:
+  - attack.reconnaissance
+  - attack.t1595.002
+logsource:
+  category: webserver
+detection:
+  selection:
+    cs-User-Agent|contains:
+      - sqlmap
+      - nikto
+      - nmap
+      - masscan
+      - dirbuster
+      - gobuster
+      - wfuzz
+      - acunetix
+      - burp
+      - w3af
+      - nessus
+      - metasploit
+  condition: selection
+level: high`,
+
+  "Encoded Attack": `title: Encoded/Obfuscated Payload Detected
+id: a3b5c7d9-6f1e-4a2b-8c0d-9e3f5b7a1c4e
+status: experimental
+description: Detects double URL/base64 encoding used to evade WAF
+author: WebGuard SIEM
+date: 2024/11/22
+tags:
+  - attack.defense_evasion
+  - attack.t1027
+logsource:
+  category: webserver
+detection:
+  selection:
+    c-uri|contains:
+      - "%252e"
+      - "%2527"
+      - "%c0%af"
+      - "\\u003c"
+      - "&#x3C;"
+      - "%25%32"
+  condition: selection
+level: high`,
+};
+
+const SIEM_QUERIES = {
+  "Splunk — SQLi": `<span class="sk">index</span>=web_logs
+<span class="sf">| where</span> <span class="sf">match</span>(uri, <span class="sv">"(?i)(union.*select|drop.*table|sleep\\(|' or 1=1|xp_cmdshell)"</span>)
+<span class="sf">| stats</span> count <span class="sk">by</span> src_ip, uri, user_agent
+<span class="sf">| where</span> count > 1
+<span class="sf">| sort</span> -count
+<span class="sf">| eval</span> risk = <span class="sf">if</span>(count > 10, <span class="sv">"CRITICAL"</span>, <span class="sv">"HIGH"</span>)`,
+
+  "Splunk — Brute Force": `<span class="sk">index</span>=web_logs method=POST uri=<span class="sv">"/login"</span> status=401
+<span class="sf">| bucket</span> _time span=1m
+<span class="sf">| stats</span> count <span class="sk">by</span> _time, src_ip
+<span class="sf">| where</span> count > 10
+<span class="sf">| eval</span> alert = <span class="sv">"BRUTE_FORCE: "</span> . src_ip . <span class="sv">" → "</span> . count . <span class="sv">" attempts"</span>
+<span class="sf">| sort</span> -count`,
+
+  "Splunk — Scanner": `<span class="sk">index</span>=web_logs
+<span class="sf">| where</span> <span class="sf">match</span>(user_agent,
+  <span class="sv">"(?i)(sqlmap|nikto|nmap|dirbuster|gobuster|acunetix|burp)"</span>)
+<span class="sf">| stats</span> count <span class="sk">by</span> src_ip, user_agent
+<span class="sf">| eval</span> action=<span class="sv">"BLOCK"</span>
+<span class="sf">| sort</span> -count`,
+
+  "Splunk — Error Spike": `<span class="sk">index</span>=web_logs status>=400
+<span class="sf">| timechart</span> span=1m count <span class="sk">by</span> src_ip
+<span class="sf">| where</span> count > 50
+<span class="sf">| eval</span> alert=<span class="sv">"HIGH_ERROR_RATE"</span>`,
+
+  "Elastic — LFI": `{
+  <span class="sv">"query"</span>: {
+    <span class="sk">"bool"</span>: {
+      <span class="sk">"should"</span>: [
+        { <span class="sv">"regexp"</span>: { <span class="sv">"uri"</span>: <span class="sv">".*(\\.\\./|%2e%2e%2f){2,}.*"</span> }},
+        { <span class="sv">"match_phrase"</span>: { <span class="sv">"uri"</span>: <span class="sv">"etc/passwd"</span> }},
+        { <span class="sv">"match_phrase"</span>: { <span class="sv">"uri"</span>: <span class="sv">"php://filter"</span> }}
+      ],
+      <span class="so">"minimum_should_match"</span>: 1
+    }
+  },
+  <span class="sv">"aggs"</span>: { <span class="sv">"by_ip"</span>: { <span class="sv">"terms"</span>: { <span class="sv">"field"</span>: <span class="sv">"clientip"</span> }}}
+}`,
+
+  "Elastic — XSS": `{
+  <span class="sv">"query"</span>: {
+    <span class="sk">"bool"</span>: {
+      <span class="sk">"should"</span>: [
+        { <span class="sv">"regexp"</span>: { <span class="sv">"uri"</span>: <span class="sv">".*(%3Cscript|&lt;script|javascript:|onerror=).*"</span> }},
+        { <span class="sv">"match_phrase"</span>: { <span class="sv">"uri"</span>: <span class="sv">"alert("</span> }},
+        { <span class="sv">"match_phrase"</span>: { <span class="sv">"uri"</span>: <span class="sv">"document.cookie"</span> }}
+      ]
+    }
+  }
+}`,
+};
+
+function renderSigmaTabs() {
+  const tabs = document.getElementById("sigma-tabs");
+  const keys = Object.keys(SIGMA_RULES);
+  tabs.innerHTML = keys.map((k,i)=>`<div class="stab${i===0?" active":""}" onclick="selectSigma(this,'${k}')">${k}</div>`).join("");
+  showSigmaRule(keys[0]);
+}
+
+let currentSigmaKey = "";
+function selectSigma(el,key) {
+  document.querySelectorAll("#sigma-tabs .stab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");
+  showSigmaRule(key);
+  currentSigmaKey = key;
+}
+function showSigmaRule(key) {
+  currentSigmaKey = key;
+  const rule = SIGMA_RULES[key]||"# Not found";
+  // Syntax highlight YAML
+  const hl = rule
+    .replace(/^(title|id|status|description|author|date|tags|logsource|detection|falsepositives|level|fields|condition|timeframe):/gm, '<span class="sk">$1</span>:')
+    .replace(/"([^"]+)"/g, '<span class="sv">"$1"</span>')
+    .replace(/(#.*)/g, '<span class="sc">$1</span>');
+  document.getElementById("sigma-display").innerHTML = hl;
+}
+function copySigma() {
+  navigator.clipboard?.writeText(SIGMA_RULES[currentSigmaKey]||"");
+  alert("Sigma rule copied to clipboard!");
+}
+function downloadSigma() {
+  const blob = new Blob([SIGMA_RULES[currentSigmaKey]||""], {type:"text/yaml"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `sigma_${currentSigmaKey.toLowerCase().replace(/\s+/g,"_")}.yml`;
+  a.click();
+}
+
+function renderQueryTabs() {
+  const tabs = document.getElementById("query-tabs");
+  const keys = Object.keys(SIEM_QUERIES);
+  tabs.innerHTML = keys.map((k,i)=>`<div class="stab${i===0?" active":""}" onclick="selectQuery(this,'${k}')">${k}</div>`).join("");
+  document.getElementById("query-display").innerHTML = SIEM_QUERIES[keys[0]];
+}
+function selectQuery(el,key) {
+  document.querySelectorAll("#query-tabs .stab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");
+  document.getElementById("query-display").innerHTML = SIEM_QUERIES[key]||"";
+}
+
+// ── PAYLOAD ANALYZER ─────────────────────────────────────────────
+
+const PAT_RULES = [
+  {name:"SQL Injection",        p:/(union|select|drop|sleep\(|or\s+1=1|xp_cmdshell|information_schema)/i, sev:"CRITICAL"},
+  {name:"XSS",                  p:/(<script|javascript:|onerror=|alert\(|document\.cookie)/i,               sev:"HIGH"},
+  {name:"LFI/Path Traversal",   p:/(\.\.\/|etc\/passwd|php:\/\/filter|proc\/self)/i,                        sev:"CRITICAL"},
+  {name:"Command Injection",    p:/([;&|`]\s*(ls|cat|id|whoami|bash)|`[^`]+`|\$\()/i,                        sev:"CRITICAL"},
+  {name:"Double URL Encoding",  p:/%25[0-9a-fA-F]{2}/i,                                                     sev:"HIGH"},
+  {name:"Unicode Obfuscation",  p:/(\\u00[3-9][0-9a-fA-F]|%c0%[0-9a-fA-F]{2})/i,                           sev:"MEDIUM"},
+  {name:"Base64 Payload",       p:/[A-Za-z0-9+/]{20,}={0,2}$/,                                              sev:"MEDIUM"},
+  {name:"HTML Entity Encoding", p:/&#x?[0-9a-fA-F]+;/i,                                                     sev:"MEDIUM"},
+];
+const SEV_COL={CRITICAL:"var(--red)",HIGH:"var(--orange)",MEDIUM:"var(--yellow)",LOW:"var(--accent2)"};
+
+function analyzePayload() {
+  const raw = document.getElementById("payload-in").value.trim();
+  if(!raw){return;}
+  let decoded = raw;
+  try{decoded = decodeURIComponent(decodeURIComponent(raw.replace(/\+/g," ")));}catch(e){}
+  const hits = PAT_RULES.filter(r=>r.p.test(raw)||r.p.test(decoded));
+  const maxSev = hits.some(h=>h.sev==="CRITICAL")?"CRITICAL":hits.some(h=>h.sev==="HIGH")?"HIGH":hits.length?"MEDIUM":"LOW";
+  let out = `<span style="color:var(--accent2)">ANALYSIS COMPLETE — ${raw.length} chars</span>\n\n`;
+  if(!hits.length) {
+    out+=`<span style="color:var(--accent2)">✓ No known attack signatures detected</span>`;
+  } else {
+    out+=`<span style="color:var(--red)">⚠ ${hits.length} SIGNATURE(S) MATCHED:</span>\n`;
+    hits.forEach(h=>out+=`\n  <span style="color:${SEV_COL[h.sev]}">[${h.sev}]</span> ${h.name}`);
+    out+=`\n\n<span style="color:${SEV_COL[maxSev]}">OVERALL RISK: ${maxSev}</span>`;
+  }
+  if(raw!==decoded) out+=`\n\n<span style="color:var(--text2)">Decoded: ${decoded.slice(0,200)}</span>`;
+  document.getElementById("payload-out").innerHTML = out;
+}
+function decode(type) {
+  const raw = document.getElementById("payload-in").value.trim();
+  let result = raw;
+  try {
+    if(type==="url") result = decodeURIComponent(raw.replace(/\+/g," "));
+    else if(type==="b64") result = atob(raw);
+    else if(type==="html") {const d=document.createElement("div");d.innerHTML=raw;result=d.innerText;}
+    else if(type==="hex") result = raw.replace(/%([0-9a-fA-F]{2})/g,(_,h)=>String.fromCharCode(parseInt(h,16)));
+  } catch(e) { result=`[Error: ${e.message}]`; }
+  document.getElementById("payload-out").innerHTML=`<span style="color:var(--accent2)">${type.toUpperCase()} DECODED:</span>\n${result}`;
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────
+
+function showModal(id) {
+  const a = allAlerts[id];
+  if(!a) return;
+  const tl = threatLevel(a.score*10);
+  document.getElementById("modal-title").textContent=`🚨 ${a.type.replace(/_/g," ")} — ALERT #${id}`;
+  const intel = a.intel||{};
+  document.getElementById("modal-body").innerHTML=`
+    <div class="mf"><div class="mf-l">Severity</div><div class="mf-v"><span class="sev sev-${a.sev}">${a.sev}</span></div></div>
+    <div class="mf"><div class="mf-l">Source IP</div><div class="mf-v" style="color:var(--accent)">${a.ip}</div></div>
+    <div class="mf"><div class="mf-l">URI</div><div class="mf-v" style="color:var(--accent2)">${a.uri}</div></div>
+    <div class="mf"><div class="mf-l">Timestamp</div><div class="mf-v">${a.ts}</div></div>
+    <div class="mitre-block">
+      <div style="font-size:9px;color:var(--purple);letter-spacing:2px;margin-bottom:8px">MITRE ATT&CK</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:10px">
+        <div><div class="mf-l">Technique ID</div><div style="color:var(--purple);font-weight:700">${a.mitre?.id||"N/A"}</div></div>
+        <div><div class="mf-l">Technique</div><div style="color:var(--text)">${a.mitre?.name||"N/A"}</div></div>
+        <div><div class="mf-l">Tactic</div><div><span class="tactic-badge">${a.mitre?.tactic||"N/A"}</span></div></div>
+        <div><div class="mf-l">Tactic ID</div><div style="color:var(--purple)">${a.mitre?.tid||"N/A"}</div></div>
+      </div>
+    </div>
+    <div class="score-block" style="margin-top:12px">
+      <div style="font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px">THREAT INTELLIGENCE</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:10px">
+        <div><div class="mf-l">Country</div><div style="color:var(--text)">${intel.country||"Unknown"} (${intel.cc||"?"})</div></div>
+        <div><div class="mf-l">ASN / Org</div><div style="color:var(--text)">${intel.asn||"?"} — ${intel.org||"?"}</div></div>
+        <div><div class="mf-l">Reputation</div><div style="color:${tl.c};font-weight:700">${intel.rep||0}/100 [${tl.l}]</div></div>
+        <div><div class="mf-l">Reports</div><div style="color:var(--text)">${intel.reports||0} abuse reports</div></div>
+        <div><div class="mf-l">TOR Node</div><div style="color:${intel.tor?"var(--red)":"var(--accent2)"}">${intel.tor?"YES ☠️":"No"}</div></div>
+        <div><div class="mf-l">Risk Score</div><div style="color:${tl.c};font-weight:700;font-size:16px">${a.score}/10</div></div>
+      </div>
+    </div>`;
+  document.getElementById("modal").classList.add("open");
+}
+function closeModal() { document.getElementById("modal").classList.remove("open"); }
+
+// ── PAGE NAVIGATION ───────────────────────────────────────────────
+
+function showPage(id, tab) {
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-tab").forEach(t=>t.classList.remove("active"));
+  document.getElementById(`page-${id}`).classList.add("active");
+  if(tab) tab.classList.add("active");
+  // Lazy render charts on first visit
+  if(id==="mitre" && !tacticChart) renderTacticChart();
+  if(id==="risk" && !riskChart) renderRiskChart();
+  if(id==="geomap") renderGeoMap();
+  if(id==="alerts") renderAlertFeedFull();
+  if(id==="overview") { renderTimeline(); }
+}
+
+// ── LIVE SIMULATION ───────────────────────────────────────────────
+
+function liveUpdate() {
+  const types = Object.keys(COUNTS);
+  const type = types[Math.floor(Math.random()*types.length)];
+  const ip   = IPS[Math.floor(Math.random()*IPS.length)];
+  const intel = THREAT_DB[ip];
+  const sev  = SEVS[type]||"MEDIUM";
+  const score = computeRisk(type, intel);
+  const uris = URIS[type]||["/unknown"];
+  const m = MITRE[type]||{};
+  const alert = {
+    id:allAlerts.length, type, sev, ip, score,
+    uri:uris[Math.floor(Math.random()*uris.length)],
+    country:intel?.country||"Unknown", cc:intel?.cc||"??",
+    ts:new Date().toISOString(), mitre:m, intel,
+    desc:descFor(type,ip),
+  };
+  allAlerts.unshift(alert);
+  typeCounts[type]=(typeCounts[type]||0)+1;
+  sevCounts[sev]++;
+  ipHits[ip]=(ipHits[ip]||0)+1;
+  const bucket=new Date().getHours();
+  if(sev==="CRITICAL") tlBuckets[bucket].C++;
+  else if(sev==="HIGH") tlBuckets[bucket].H++;
+  else if(sev==="MEDIUM") tlBuckets[bucket].M++;
+
+  // Update feed
+  const feed = document.getElementById("alert-feed");
+  const row = document.createElement("div");
+  row.innerHTML = makeAlertRow(alert);
+  feed.insertBefore(row.firstChild, feed.firstChild);
+  document.getElementById("alert-badge").textContent=`${allAlerts.length} ALERTS`;
+
+  // APM update
+  updateAPM();
+
+  // Stat cards every 10
+  if(allAlerts.length%10===0) renderStatCards();
+}
+
+// ── CLOCK ─────────────────────────────────────────────────────────
+function updateClock() {
+  document.getElementById("hdr-clock").textContent = new Date().toISOString().slice(11,19)+" UTC";
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+window.addEventListener("load", ()=>{
+  seedData();
+  renderStatCards();
+  renderAlertFeed();
+  renderAtkBars();
+  renderIPTable();
+  setTimeout(renderTimeline, 100);
+  renderAPM();
+  renderEnrichCards();
+  renderMITRETable();
+  renderKillChain();
+  renderRiskLeaderboard();
+  renderRiskBars();
+  renderCountryBars();
+  renderSigmaTabs();
+  renderQueryTabs();
+
+  setInterval(liveUpdate, 3000);
+  setInterval(updateClock, 1000);
+  updateClock();
+});
+
+window.addEventListener("resize", ()=>{
+  renderTimeline();
+  if(apmChart){apmChart.resize();}
+  if(tacticChart){tacticChart.resize();}
+  if(riskChart){riskChart.resize();}
+});
+</script>
+</body>
+</html>

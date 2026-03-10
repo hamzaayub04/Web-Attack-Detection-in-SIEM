@@ -1,0 +1,2181 @@
+[
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/web.config",
+    "matched_patterns": [
+      "/web\\.config"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:57 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/index.php?page=..%2F..%2F..%2Fetc%2Fshadow",
+    "matched_patterns": [
+      "\\.\\./",
+      "(etc/passwd|etc/shadow|etc/hosts)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:07:52 +0000"
+  },
+  {
+    "type": "DIR_TRAVERSAL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/index.php?page=..%2F..%2F..%2Fetc%2Fshadow",
+    "matched_patterns": [
+      "(\\.\\.\\/){2,}"
+    ],
+    "description": "Directory traversal attempt detected",
+    "timestamp": "10/Mar/2026:19:07:52 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/index.php?page=..%2F..%2F..%2Fetc%2Fshadow",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:07:52 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "198.51.100.12",
+    "uri": "/search?q=%2527%2520OR%25201%253D1--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:09:30 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/search?q=%2527%2520OR%25201%253D1--",
+    "matched_patterns": [
+      "%25[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:09:30 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/api/exec?cmd=%60whoami%60",
+    "matched_patterns": [
+      "\\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\\b"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:08:28 +0000"
+  },
+  {
+    "type": "COMMAND_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/api/exec?cmd=%60whoami%60",
+    "matched_patterns": [
+      "[;&|`]\\s*(ls|cat|id|whoami|uname|pwd|echo|wget|curl|nc|bash|sh|python|perl|ruby)",
+      "`[^`]+`"
+    ],
+    "description": "OS command injection attempt detected",
+    "timestamp": "10/Mar/2026:19:08:28 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/composer.json",
+    "matched_patterns": [
+      "composer\\.json"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:41 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/file?path=%c0%ae%c0%ae%c0%afetc%c0%afpasswd",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}",
+      "%c0%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:09:28 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/file?path=%c0%ae%c0%ae%c0%afetc%c0%afpasswd",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:09:28 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/.env",
+    "matched_patterns": [
+      "/\\.env$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:41 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/search?q=%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:24 +0000"
+  },
+  {
+    "type": "XSS",
+    "severity": "HIGH",
+    "ip": "203.0.113.77",
+    "uri": "/search?q=%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E",
+    "matched_patterns": [
+      "<\\s*script[\\s\\S]*?>",
+      "(alert|confirm|prompt)\\s*\\(",
+      "(%3C|<)\\s*script"
+    ],
+    "description": "Cross-site scripting payload detected",
+    "timestamp": "10/Mar/2026:19:07:24 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "203.0.113.77",
+    "uri": "/search?q=%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:07:24 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/wp-admin/",
+    "matched_patterns": [
+      "/wp-admin"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:09:01 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/web.config",
+    "matched_patterns": [
+      "/web\\.config"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:41 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/.htaccess",
+    "matched_patterns": [
+      "\\.htaccess$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:39 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/wp-admin/",
+    "matched_patterns": [
+      "/wp-admin"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:53 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/page?id=PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==",
+    "matched_patterns": [
+      "[A-Za-z0-9+/]{30,}={0,2}(?=\\s|$|&|\\\")"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:09:14 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/.git/config",
+    "matched_patterns": [
+      "/\\.git/"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:51 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/page?file=../../../../etc/passwd",
+    "matched_patterns": [
+      "\\.\\./",
+      "(etc/passwd|etc/shadow|etc/hosts)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:08:05 +0000"
+  },
+  {
+    "type": "DIR_TRAVERSAL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/page?file=../../../../etc/passwd",
+    "matched_patterns": [
+      "(\\.\\.\\/){2,}"
+    ],
+    "description": "Directory traversal attempt detected",
+    "timestamp": "10/Mar/2026:19:08:05 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/page?file=../../../../etc/passwd",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:08:05 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/server-status",
+    "matched_patterns": [
+      "/server-status"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:09:06 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "10.0.0.99",
+    "uri": "/profile?name=%3Csvg%2Fonload%3Dalert%28%27xss%27%29%3E",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:40 +0000"
+  },
+  {
+    "type": "XSS",
+    "severity": "HIGH",
+    "ip": "10.0.0.99",
+    "uri": "/profile?name=%3Csvg%2Fonload%3Dalert%28%27xss%27%29%3E",
+    "matched_patterns": [
+      "on\\w+\\s*=",
+      "(alert|confirm|prompt)\\s*\\("
+    ],
+    "description": "Cross-site scripting payload detected",
+    "timestamp": "10/Mar/2026:19:07:40 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "10.0.0.99",
+    "uri": "/profile?name=%3Csvg%2Fonload%3Dalert%28%27xss%27%29%3E",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:07:40 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/product?id=1%3B+DROP+TABLE+users%3B--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))",
+      "\\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\\b"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:01 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "203.0.113.77",
+    "uri": "/product?id=1%3B+DROP+TABLE+users%3B--",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:07:01 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/api/v1/users?id=1+AND+SLEEP%285%29--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))",
+      "(sleep\\s*\\(|benchmark\\s*\\(|waitfor\\s+delay)"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:03 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "203.0.113.77",
+    "uri": "/api/v1/users?id=1+AND+SLEEP%285%29--",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:07:03 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/view?doc=php://filter/convert.base64-encode/resource=index.php",
+    "matched_patterns": [
+      "php://(filter|input|data|expect)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:08:02 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/view?doc=php://filter/convert.base64-encode/resource=index.php",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:08:02 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/composer.json",
+    "matched_patterns": [
+      "composer\\.json"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:50 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/download?path=....//....//....//etc/passwd",
+    "matched_patterns": [
+      "\\.\\./",
+      "(etc/passwd|etc/shadow|etc/hosts)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:08:11 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/download?path=....//....//....//etc/passwd",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:08:11 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "45.33.32.156",
+    "uri": "/login?username=%27+OR+%271%27%3D%271&password=test",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:06:47 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "45.33.32.156",
+    "uri": "/login?username=%27+OR+%271%27%3D%271&password=test",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:06:47 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "45.33.32.156",
+    "uri": "/login?username=%27+OR+%271%27%3D%271&password=test",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:06:47 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "172.16.254.1",
+    "uri": "/product?id=1%3B+DROP+TABLE+users%3B--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))",
+      "\\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\\b"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:15 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "172.16.254.1",
+    "uri": "/product?id=1%3B+DROP+TABLE+users%3B--",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:07:15 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/admin/",
+    "matched_patterns": [
+      "/admin/?$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:35 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/file?path=%c0%ae%c0%ae%c0%afetc%c0%afpasswd",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}",
+      "%c0%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:09:19 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/file?path=%c0%ae%c0%ae%c0%afetc%c0%afpasswd",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:09:19 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/ping?host=127.0.0.1%3B+cat+%2Fetc%2Fpasswd",
+    "matched_patterns": [
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:08:12 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/ping?host=127.0.0.1%3B+cat+%2Fetc%2Fpasswd",
+    "matched_patterns": [
+      "(etc/passwd|etc/shadow|etc/hosts)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:08:12 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/search?q=%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:18 +0000"
+  },
+  {
+    "type": "XSS",
+    "severity": "HIGH",
+    "ip": "203.0.113.77",
+    "uri": "/search?q=%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E",
+    "matched_patterns": [
+      "<\\s*script[\\s\\S]*?>",
+      "(alert|confirm|prompt)\\s*\\(",
+      "(%3C|<)\\s*script"
+    ],
+    "description": "Cross-site scripting payload detected",
+    "timestamp": "10/Mar/2026:19:07:18 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "203.0.113.77",
+    "uri": "/search?q=%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:07:18 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/login?username=%27+OR+%271%27%3D%271&password=test",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:12 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/login?username=%27+OR+%271%27%3D%271&password=test",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:07:12 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/login?username=%27+OR+%271%27%3D%271&password=test",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:07:12 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/wp-admin/",
+    "matched_patterns": [
+      "/wp-admin"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:42 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/admin/",
+    "matched_patterns": [
+      "/admin/?$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:44 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/download?path=....//....//....//etc/passwd",
+    "matched_patterns": [
+      "\\.\\./",
+      "(etc/passwd|etc/shadow|etc/hosts)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:07:49 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/download?path=....//....//....//etc/passwd",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:07:49 +0000"
+  },
+  {
+    "type": "XSS",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/comment?text=%3Cimg+src%3Dx+onerror%3Dalert%281%29%3E",
+    "matched_patterns": [
+      "on\\w+\\s*=",
+      "(alert|confirm|prompt)\\s*\\("
+    ],
+    "description": "Cross-site scripting payload detected",
+    "timestamp": "10/Mar/2026:19:07:38 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/comment?text=%3Cimg+src%3Dx+onerror%3Dalert%281%29%3E",
+    "agent": "DirBuster-1.0-RC1",
+    "matched_patterns": [
+      "dirbuster"
+    ],
+    "description": "Known attack tool user-agent detected: dirbuster",
+    "timestamp": "10/Mar/2026:19:07:38 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "10.0.0.99",
+    "uri": "/search?q=%27+UNION+SELECT+null%2Cusername%2Cpassword+FROM+users--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))",
+      "\\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\\b"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:06:41 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "10.0.0.99",
+    "uri": "/search?q=%27+UNION+SELECT+null%2Cusername%2Cpassword+FROM+users--",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:06:41 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "10.0.0.99",
+    "uri": "/search?q=%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:29 +0000"
+  },
+  {
+    "type": "XSS",
+    "severity": "HIGH",
+    "ip": "10.0.0.99",
+    "uri": "/search?q=%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E",
+    "matched_patterns": [
+      "<\\s*script[\\s\\S]*?>",
+      "(alert|confirm|prompt)\\s*\\(",
+      "(%3C|<)\\s*script"
+    ],
+    "description": "Cross-site scripting payload detected",
+    "timestamp": "10/Mar/2026:19:07:29 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "10.0.0.99",
+    "uri": "/search?q=%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:07:29 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/.htaccess",
+    "matched_patterns": [
+      "\\.htaccess$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:09:05 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/ping?host=127.0.0.1%3B+cat+%2Fetc%2Fpasswd",
+    "matched_patterns": [
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:08:18 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/ping?host=127.0.0.1%3B+cat+%2Fetc%2Fpasswd",
+    "matched_patterns": [
+      "(etc/passwd|etc/shadow|etc/hosts)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:08:18 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/admin/",
+    "matched_patterns": [
+      "/admin/?$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:55 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/.git/config",
+    "matched_patterns": [
+      "/\\.git/"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:41 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/product?id=1%3B+DROP+TABLE+users%3B--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))",
+      "\\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\\b"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:09 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/product?id=1%3B+DROP+TABLE+users%3B--",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:07:09 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/page?id=PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==",
+    "matched_patterns": [
+      "[A-Za-z0-9+/]{30,}={0,2}(?=\\s|$|&|\\\")"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:09:31 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/.git/config",
+    "matched_patterns": [
+      "/\\.git/"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:09:00 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/download?path=....//....//....//etc/passwd",
+    "matched_patterns": [
+      "\\.\\./",
+      "(etc/passwd|etc/shadow|etc/hosts)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:07:57 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/download?path=....//....//....//etc/passwd",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:07:57 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/page?file=../../../../etc/passwd",
+    "matched_patterns": [
+      "\\.\\./",
+      "(etc/passwd|etc/shadow|etc/hosts)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:07:58 +0000"
+  },
+  {
+    "type": "DIR_TRAVERSAL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/page?file=../../../../etc/passwd",
+    "matched_patterns": [
+      "(\\.\\.\\/){2,}"
+    ],
+    "description": "Directory traversal attempt detected",
+    "timestamp": "10/Mar/2026:19:07:58 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/page?file=../../../../etc/passwd",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:07:58 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/api/exec?cmd=%60whoami%60",
+    "matched_patterns": [
+      "\\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\\b"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:08:22 +0000"
+  },
+  {
+    "type": "COMMAND_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/api/exec?cmd=%60whoami%60",
+    "matched_patterns": [
+      "[;&|`]\\s*(ls|cat|id|whoami|uname|pwd|echo|wget|curl|nc|bash|sh|python|perl|ruby)",
+      "`[^`]+`"
+    ],
+    "description": "OS command injection attempt detected",
+    "timestamp": "10/Mar/2026:19:08:22 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/page?file=../../../../etc/passwd",
+    "matched_patterns": [
+      "\\.\\./",
+      "(etc/passwd|etc/shadow|etc/hosts)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:07:51 +0000"
+  },
+  {
+    "type": "DIR_TRAVERSAL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/page?file=../../../../etc/passwd",
+    "matched_patterns": [
+      "(\\.\\.\\/){2,}"
+    ],
+    "description": "Directory traversal attempt detected",
+    "timestamp": "10/Mar/2026:19:07:51 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/page?file=../../../../etc/passwd",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:07:51 +0000"
+  },
+  {
+    "type": "XSS",
+    "severity": "HIGH",
+    "ip": "203.0.113.77",
+    "uri": "/comment?text=%3Cimg+src%3Dx+onerror%3Dalert%281%29%3E",
+    "matched_patterns": [
+      "on\\w+\\s*=",
+      "(alert|confirm|prompt)\\s*\\("
+    ],
+    "description": "Cross-site scripting payload detected",
+    "timestamp": "10/Mar/2026:19:07:26 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/ping?host=127.0.0.1%3B+cat+%2Fetc%2Fpasswd",
+    "matched_patterns": [
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:08:24 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/ping?host=127.0.0.1%3B+cat+%2Fetc%2Fpasswd",
+    "matched_patterns": [
+      "(etc/passwd|etc/shadow|etc/hosts)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:08:24 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/server-status",
+    "matched_patterns": [
+      "/server-status"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:57 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/composer.json",
+    "matched_patterns": [
+      "composer\\.json"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:59 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/page?file=../../../../etc/passwd",
+    "matched_patterns": [
+      "\\.\\./",
+      "(etc/passwd|etc/shadow|etc/hosts)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:07:43 +0000"
+  },
+  {
+    "type": "DIR_TRAVERSAL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/page?file=../../../../etc/passwd",
+    "matched_patterns": [
+      "(\\.\\.\\/){2,}"
+    ],
+    "description": "Directory traversal attempt detected",
+    "timestamp": "10/Mar/2026:19:07:43 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/page?file=../../../../etc/passwd",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:07:43 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "45.33.32.156",
+    "uri": "/search?q=%27+UNION+SELECT+null%2Cusername%2Cpassword+FROM+users--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))",
+      "\\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\\b"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:06:59 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "45.33.32.156",
+    "uri": "/search?q=%27+UNION+SELECT+null%2Cusername%2Cpassword+FROM+users--",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:06:59 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/config.php.bak",
+    "matched_patterns": [
+      "\\.php\\.bak$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:48 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/phpmyadmin/",
+    "matched_patterns": [
+      "/phpmyadmin"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:09:02 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/phpmyadmin/",
+    "matched_patterns": [
+      "/phpmyadmin"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:54 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/page?id=PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==",
+    "matched_patterns": [
+      "[A-Za-z0-9+/]{30,}={0,2}(?=\\s|$|&|\\\")"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:09:23 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/page?id=PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==",
+    "agent": "Acunetix Web Vulnerability Scanner/13",
+    "matched_patterns": [
+      "acunetix"
+    ],
+    "description": "Known attack tool user-agent detected: acunetix",
+    "timestamp": "10/Mar/2026:19:09:23 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/server-status",
+    "matched_patterns": [
+      "/server-status"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:50 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/wp-admin/",
+    "matched_patterns": [
+      "/wp-admin"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:32 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "198.51.100.12",
+    "uri": "/login?username=%27+OR+%271%27%3D%271&password=test",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:06:39 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/login?username=%27+OR+%271%27%3D%271&password=test",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:06:39 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/login?username=%27+OR+%271%27%3D%271&password=test",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:06:39 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/view?doc=php://filter/convert.base64-encode/resource=index.php",
+    "matched_patterns": [
+      "php://(filter|input|data|expect)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:08:10 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/view?doc=php://filter/convert.base64-encode/resource=index.php",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:08:10 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/.env",
+    "matched_patterns": [
+      "/\\.env$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:29 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "172.16.254.1",
+    "uri": "/product?id=1%3B+DROP+TABLE+users%3B--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))",
+      "\\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\\b"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:06:43 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "172.16.254.1",
+    "uri": "/product?id=1%3B+DROP+TABLE+users%3B--",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:06:43 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/index.php?page=..%2F..%2F..%2Fetc%2Fshadow",
+    "matched_patterns": [
+      "\\.\\./",
+      "(etc/passwd|etc/shadow|etc/hosts)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:07:44 +0000"
+  },
+  {
+    "type": "DIR_TRAVERSAL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/index.php?page=..%2F..%2F..%2Fetc%2Fshadow",
+    "matched_patterns": [
+      "(\\.\\.\\/){2,}"
+    ],
+    "description": "Directory traversal attempt detected",
+    "timestamp": "10/Mar/2026:19:07:44 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/index.php?page=..%2F..%2F..%2Fetc%2Fshadow",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:07:44 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/.env",
+    "matched_patterns": [
+      "/\\.env$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:51 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "198.51.100.12",
+    "uri": "/search?q=%2527%2520OR%25201%253D1--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:09:10 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/search?q=%2527%2520OR%25201%253D1--",
+    "matched_patterns": [
+      "%25[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:09:10 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "172.16.254.1",
+    "uri": "/search?q=%27+UNION+SELECT+null%2Cusername%2Cpassword+FROM+users--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))",
+      "\\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\\b"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:13 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "172.16.254.1",
+    "uri": "/search?q=%27+UNION+SELECT+null%2Cusername%2Cpassword+FROM+users--",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:07:13 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/profile?name=%3Csvg%2Fonload%3Dalert%28%27xss%27%29%3E",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:27 +0000"
+  },
+  {
+    "type": "XSS",
+    "severity": "HIGH",
+    "ip": "203.0.113.77",
+    "uri": "/profile?name=%3Csvg%2Fonload%3Dalert%28%27xss%27%29%3E",
+    "matched_patterns": [
+      "on\\w+\\s*=",
+      "(alert|confirm|prompt)\\s*\\("
+    ],
+    "description": "Cross-site scripting payload detected",
+    "timestamp": "10/Mar/2026:19:07:27 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "203.0.113.77",
+    "uri": "/profile?name=%3Csvg%2Fonload%3Dalert%28%27xss%27%29%3E",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:07:27 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "203.0.113.77",
+    "uri": "/profile?name=%3Csvg%2Fonload%3Dalert%28%27xss%27%29%3E",
+    "agent": "DirBuster-1.0-RC1",
+    "matched_patterns": [
+      "dirbuster"
+    ],
+    "description": "Known attack tool user-agent detected: dirbuster",
+    "timestamp": "10/Mar/2026:19:07:27 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "10.0.0.99",
+    "uri": "/product?id=1%3B+DROP+TABLE+users%3B--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))",
+      "\\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\\b"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:06:51 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "10.0.0.99",
+    "uri": "/product?id=1%3B+DROP+TABLE+users%3B--",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:06:51 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/composer.json",
+    "matched_patterns": [
+      "composer\\.json"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:09:07 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/phpmyadmin/",
+    "matched_patterns": [
+      "/phpmyadmin"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:42 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/config.php.bak",
+    "matched_patterns": [
+      "\\.php\\.bak$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:37 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/config.php.bak",
+    "matched_patterns": [
+      "\\.php\\.bak$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:09:05 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "172.16.254.1",
+    "uri": "/login?username=%27+OR+%271%27%3D%271&password=test",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:05 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "172.16.254.1",
+    "uri": "/login?username=%27+OR+%271%27%3D%271&password=test",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:07:05 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "172.16.254.1",
+    "uri": "/login?username=%27+OR+%271%27%3D%271&password=test",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:07:05 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/server-status",
+    "matched_patterns": [
+      "/server-status"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:39 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/api/exec?cmd=%60whoami%60",
+    "matched_patterns": [
+      "\\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\\b"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:08:17 +0000"
+  },
+  {
+    "type": "COMMAND_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/api/exec?cmd=%60whoami%60",
+    "matched_patterns": [
+      "[;&|`]\\s*(ls|cat|id|whoami|uname|pwd|echo|wget|curl|nc|bash|sh|python|perl|ruby)",
+      "`[^`]+`"
+    ],
+    "description": "OS command injection attempt detected",
+    "timestamp": "10/Mar/2026:19:08:17 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/.htaccess",
+    "matched_patterns": [
+      "\\.htaccess$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:49 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "198.51.100.12",
+    "uri": "/profile?name=%3Csvg%2Fonload%3Dalert%28%27xss%27%29%3E",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:21 +0000"
+  },
+  {
+    "type": "XSS",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/profile?name=%3Csvg%2Fonload%3Dalert%28%27xss%27%29%3E",
+    "matched_patterns": [
+      "on\\w+\\s*=",
+      "(alert|confirm|prompt)\\s*\\("
+    ],
+    "description": "Cross-site scripting payload detected",
+    "timestamp": "10/Mar/2026:19:07:21 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/profile?name=%3Csvg%2Fonload%3Dalert%28%27xss%27%29%3E",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:07:21 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/profile?name=%3Csvg%2Fonload%3Dalert%28%27xss%27%29%3E",
+    "agent": "Acunetix Web Vulnerability Scanner/13",
+    "matched_patterns": [
+      "acunetix"
+    ],
+    "description": "Known attack tool user-agent detected: acunetix",
+    "timestamp": "10/Mar/2026:19:07:21 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/config.php.bak",
+    "matched_patterns": [
+      "\\.php\\.bak$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:56 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/download?path=....//....//....//etc/passwd",
+    "matched_patterns": [
+      "\\.\\./",
+      "(etc/passwd|etc/shadow|etc/hosts)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:08:04 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/download?path=....//....//....//etc/passwd",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:08:04 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "10.0.0.99",
+    "uri": "/api/v1/users?id=1+AND+SLEEP%285%29--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))",
+      "(sleep\\s*\\(|benchmark\\s*\\(|waitfor\\s+delay)"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:06:54 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "10.0.0.99",
+    "uri": "/api/v1/users?id=1+AND+SLEEP%285%29--",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:06:54 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/.git/config",
+    "matched_patterns": [
+      "/\\.git/"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:31 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "198.51.100.12",
+    "uri": "/search?q=%2527%2520OR%25201%253D1--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:09:20 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/search?q=%2527%2520OR%25201%253D1--",
+    "matched_patterns": [
+      "%25[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:09:20 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "45.33.32.156",
+    "uri": "/api/v1/users?id=1+AND+SLEEP%285%29--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))",
+      "(sleep\\s*\\(|benchmark\\s*\\(|waitfor\\s+delay)"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:16 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "45.33.32.156",
+    "uri": "/api/v1/users?id=1+AND+SLEEP%285%29--",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:07:16 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/api/v1/users?id=1+AND+SLEEP%285%29--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))",
+      "(sleep\\s*\\(|benchmark\\s*\\(|waitfor\\s+delay)"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:11 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "203.0.113.77",
+    "uri": "/api/v1/users?id=1+AND+SLEEP%285%29--",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:07:11 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "203.0.113.77",
+    "uri": "/search?q=%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:36 +0000"
+  },
+  {
+    "type": "XSS",
+    "severity": "HIGH",
+    "ip": "203.0.113.77",
+    "uri": "/search?q=%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E",
+    "matched_patterns": [
+      "<\\s*script[\\s\\S]*?>",
+      "(alert|confirm|prompt)\\s*\\(",
+      "(%3C|<)\\s*script"
+    ],
+    "description": "Cross-site scripting payload detected",
+    "timestamp": "10/Mar/2026:19:07:36 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "203.0.113.77",
+    "uri": "/search?q=%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:07:36 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "172.16.254.1",
+    "uri": "/search?q=%27+UNION+SELECT+null%2Cusername%2Cpassword+FROM+users--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))",
+      "\\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\\b"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:06:50 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "172.16.254.1",
+    "uri": "/search?q=%27+UNION+SELECT+null%2Cusername%2Cpassword+FROM+users--",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:06:50 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/api/v1/users?id=1+AND+SLEEP%285%29--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))",
+      "(sleep\\s*\\(|benchmark\\s*\\(|waitfor\\s+delay)"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:06:45 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/api/v1/users?id=1+AND+SLEEP%285%29--",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:06:45 +0000"
+  },
+  {
+    "type": "XSS",
+    "severity": "HIGH",
+    "ip": "203.0.113.77",
+    "uri": "/comment?text=%3Cimg+src%3Dx+onerror%3Dalert%281%29%3E",
+    "matched_patterns": [
+      "on\\w+\\s*=",
+      "(alert|confirm|prompt)\\s*\\("
+    ],
+    "description": "Cross-site scripting payload detected",
+    "timestamp": "10/Mar/2026:19:07:20 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/index.php?page=..%2F..%2F..%2Fetc%2Fshadow",
+    "matched_patterns": [
+      "\\.\\./",
+      "(etc/passwd|etc/shadow|etc/hosts)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:08:01 +0000"
+  },
+  {
+    "type": "DIR_TRAVERSAL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/index.php?page=..%2F..%2F..%2Fetc%2Fshadow",
+    "matched_patterns": [
+      "(\\.\\.\\/){2,}"
+    ],
+    "description": "Directory traversal attempt detected",
+    "timestamp": "10/Mar/2026:19:08:01 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/index.php?page=..%2F..%2F..%2Fetc%2Fshadow",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:08:01 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/view?doc=php://filter/convert.base64-encode/resource=index.php",
+    "matched_patterns": [
+      "php://(filter|input|data|expect)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:07:54 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/view?doc=php://filter/convert.base64-encode/resource=index.php",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:07:54 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "10.0.0.99",
+    "uri": "/login?username=%27+OR+%271%27%3D%271&password=test",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:06:56 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "10.0.0.99",
+    "uri": "/login?username=%27+OR+%271%27%3D%271&password=test",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:06:56 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "10.0.0.99",
+    "uri": "/login?username=%27+OR+%271%27%3D%271&password=test",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:06:56 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/index.php?page=..%2F..%2F..%2Fetc%2Fshadow",
+    "matched_patterns": [
+      "\\.\\./",
+      "(etc/passwd|etc/shadow|etc/hosts)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:08:08 +0000"
+  },
+  {
+    "type": "DIR_TRAVERSAL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/index.php?page=..%2F..%2F..%2Fetc%2Fshadow",
+    "matched_patterns": [
+      "(\\.\\.\\/){2,}"
+    ],
+    "description": "Directory traversal attempt detected",
+    "timestamp": "10/Mar/2026:19:08:08 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/index.php?page=..%2F..%2F..%2Fetc%2Fshadow",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:08:08 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/.env",
+    "matched_patterns": [
+      "/\\.env$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:09:00 +0000"
+  },
+  {
+    "type": "XSS",
+    "severity": "HIGH",
+    "ip": "172.16.254.1",
+    "uri": "/comment?text=%3Cimg+src%3Dx+onerror%3Dalert%281%29%3E",
+    "matched_patterns": [
+      "on\\w+\\s*=",
+      "(alert|confirm|prompt)\\s*\\("
+    ],
+    "description": "Cross-site scripting payload detected",
+    "timestamp": "10/Mar/2026:19:07:31 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/web.config",
+    "matched_patterns": [
+      "/web\\.config"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:50 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/search?q=%27+UNION+SELECT+null%2Cusername%2Cpassword+FROM+users--",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))",
+      "\\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\\b"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:06 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/search?q=%27+UNION+SELECT+null%2Cusername%2Cpassword+FROM+users--",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:07:06 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/.htaccess",
+    "matched_patterns": [
+      "\\.htaccess$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:56 +0000"
+  },
+  {
+    "type": "LFI",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/view?doc=php://filter/convert.base64-encode/resource=index.php",
+    "matched_patterns": [
+      "php://(filter|input|data|expect)"
+    ],
+    "description": "Local file inclusion attempt detected",
+    "timestamp": "10/Mar/2026:19:07:46 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/view?doc=php://filter/convert.base64-encode/resource=index.php",
+    "agent": "Nikto/2.1.6",
+    "matched_patterns": [
+      "nikto"
+    ],
+    "description": "Known attack tool user-agent detected: nikto",
+    "timestamp": "10/Mar/2026:19:07:46 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/admin/",
+    "matched_patterns": [
+      "/admin/?$"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:09:02 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/web.config",
+    "matched_patterns": [
+      "/web\\.config"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:09:07 +0000"
+  },
+  {
+    "type": "SUSPICIOUS_PATH",
+    "severity": "MEDIUM",
+    "ip": "45.33.32.156",
+    "uri": "/phpmyadmin/",
+    "matched_patterns": [
+      "/phpmyadmin"
+    ],
+    "description": "Access to sensitive/admin path detected",
+    "timestamp": "10/Mar/2026:19:08:33 +0000"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "severity": "CRITICAL",
+    "ip": "185.220.101.45",
+    "uri": "/profile?name=%3Csvg%2Fonload%3Dalert%28%27xss%27%29%3E",
+    "matched_patterns": [
+      "(\\%27|\\'|\\-\\-|\\%23|#)",
+      "((\\%3D)|(=))[^\\n]*((\\%27)|(\\')|(\\-\\-)|(\\%3B)|(;))"
+    ],
+    "description": "SQL injection attempt detected in URI parameters",
+    "timestamp": "10/Mar/2026:19:07:33 +0000"
+  },
+  {
+    "type": "XSS",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/profile?name=%3Csvg%2Fonload%3Dalert%28%27xss%27%29%3E",
+    "matched_patterns": [
+      "on\\w+\\s*=",
+      "(alert|confirm|prompt)\\s*\\("
+    ],
+    "description": "Cross-site scripting payload detected",
+    "timestamp": "10/Mar/2026:19:07:33 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "185.220.101.45",
+    "uri": "/profile?name=%3Csvg%2Fonload%3Dalert%28%27xss%27%29%3E",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:07:33 +0000"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/file?path=%c0%ae%c0%ae%c0%afetc%c0%afpasswd",
+    "matched_patterns": [
+      "%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}%[0-9a-fA-F]{2}",
+      "%c0%[0-9a-fA-F]{2}"
+    ],
+    "description": "Suspicious encoding/obfuscation detected in request",
+    "timestamp": "10/Mar/2026:19:09:36 +0000"
+  },
+  {
+    "type": "SCANNER_TOOL",
+    "severity": "HIGH",
+    "ip": "198.51.100.12",
+    "uri": "/file?path=%c0%ae%c0%ae%c0%afetc%c0%afpasswd",
+    "agent": "sqlmap/1.7.8#stable (https://sqlmap.org)",
+    "matched_patterns": [
+      "sqlmap"
+    ],
+    "description": "Known attack tool user-agent detected: sqlmap",
+    "timestamp": "10/Mar/2026:19:09:36 +0000"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "severity": "HIGH",
+    "ip": "172.16.254.1",
+    "total_requests": 46,
+    "error_count": 43,
+    "error_rate": "93.5%",
+    "description": "High error rate from 172.16.254.1: 93.5% errors over 46 requests"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "severity": "HIGH",
+    "ip": "45.33.32.156",
+    "total_requests": 47,
+    "error_count": 45,
+    "error_rate": "95.7%",
+    "description": "High error rate from 45.33.32.156: 95.7% errors over 47 requests"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "severity": "CRITICAL",
+    "ip": "172.16.254.1",
+    "attempt_count": 40,
+    "description": "Brute force login detected: 40 POST /login requests from 172.16.254.1"
+  },
+  {
+    "type": "404_CASCADE",
+    "severity": "HIGH",
+    "ip": "45.33.32.156",
+    "count_404": 31,
+    "description": "404 flood detected: 31 Not Found responses for 45.33.32.156 \u2014 likely directory scanner"
+  }
+]

